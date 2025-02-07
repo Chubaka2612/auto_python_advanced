@@ -14,7 +14,7 @@ Description:
     Test suite:
         'id': "{title:<str>,length:<int>,cases:<list>}"        
         
-    Where,  id - is an index by which data stored in Redis hash (autocalculated on server side)
+    Where,  id - is an index by which data stored in Redis hash (auto-calculated on server side)
             suite_id - test case specific field that store id of related test suite
             length - test suite specific field that represents amount of linked test case
             cases - test suite specific field that contains list with IDs of linked test cases
@@ -57,9 +57,9 @@ Application usage:
             # yum install -y docker
         2. Cd into the project directory
         3. Build docker image:
-            # docker build --rm -t api-python3.6 .
+            # docker build --rm -t api-python3.12 .
         4. Run the application in the container:
-            # docker run -d -it --rm --name api-python3.6 -p 5000:5000 -v "$PWD":/opt/app api-python3.6
+            # docker run -d -it --rm --name api-python3.12 -p 5000:5000 -v "$PWD":/opt/app api-python3.12
         5. Run test query:
             # curl http://127.0.0.1:5000/api/v1/
             {
@@ -74,7 +74,7 @@ API calls:
     This files are placed in /docs/api folder of current project.
     
     Application supports all default Flask server and several custom (which are
-    discibed in API doc) responses. 
+    described in API doc) responses.
     
     How to open PDF file: Simply open it in preferable pdf viewer
     

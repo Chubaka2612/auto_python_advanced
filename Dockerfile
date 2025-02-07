@@ -1,4 +1,4 @@
-FROM python:3.6
+FROM python:3.12
 
 COPY \
   requirements.txt /etc/
@@ -12,6 +12,6 @@ RUN \
   apt-get install -y redis-server && \
   rm -rf /var/lib/apt/lists/*
 
-ENV PYTHONPATH "${PYTHONPATH}:/opt/app"
+ENV PYTHONPATH="${PYTHONPATH}:/opt/app"
 
 ENTRYPOINT service redis-server start && python -m rest

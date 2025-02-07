@@ -1,6 +1,7 @@
 """Module with Flask functional. REST requests handling."""
 
 from flask import Flask, jsonify, request
+from flask_cors import CORS, cross_origin
 from flask_jwt_extended import JWTManager, jwt_required, create_access_token
 
 from common.configs_handler import Config
@@ -15,6 +16,10 @@ suite_redis = TestSuiteRedis(server_data['hash_names']['test_suite'])
 
 # Flask
 app = Flask(__name__)
+cors = CORS(app,
+            resources={r"/api/*": {"origins": ["http://127.0.0.1:5000", "https://editor.swagger.io"]}},
+            supports_credentials=True)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 app.config['JWT_SECRET_KEY'] = server_data['jwt_secrete_key']
 jwt = JWTManager(app)
@@ -105,7 +110,7 @@ def post_test_case():
         return jsonify(message="Bad request body"), 400
 
     if not suite_redis.is_item_exists(data['suiteID']):
-        return jsonify(message="Test suite does not exist"), 404
+        return jsonify(message="Test suite doesn't exist"), 404
 
     result = case_redis.add(data)
     if result is None:
@@ -161,7 +166,7 @@ def put_test_case(test_case_id):
         return jsonify(message="Bad request body"), 400
 
     if not case_redis.update(test_case_id, data):
-        return jsonify(message="Test case does not exist"), 404
+        return jsonify(message="Test case doesn't exist"), 404
 
     return jsonify(message="Test case successfully updated"), 200
 
@@ -291,7 +296,7 @@ def put_test_suite(test_suite_id):
         return jsonify(message="Bad request body"), 400
 
     if not suite_redis.update(test_suite_id, data):
-        return jsonify(message="Test suite does not exist"), 404
+        return jsonify(message="Test suite doesn't exist"), 404
 
     return jsonify(message="Test suite successfully updated"), 200
 

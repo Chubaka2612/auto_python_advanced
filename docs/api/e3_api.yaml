@@ -152,7 +152,7 @@ paths:
                 properties:
                   message:
                     type: "string"
-                    example: "Test suite does not exist"
+                    example: "Test suite doesn't exist"
         409:
           description: "Test case already exist"
           content:
@@ -279,7 +279,7 @@ paths:
                 properties:
                   message:
                     type: "string"
-                    example: "Test case does not exist"
+                    example: "Test case doesn't exist"
         415:
           description: "Incorrect content type"
           content:
@@ -446,11 +446,11 @@ paths:
                       type: "string"
                       example: "Content-type must be application/json"
     
-  /test-suites/{test_suite_id}:
+  /test_suites/{test_suite_id}:
     get:
       tags: 
       - "test-suite"
-      summary: "Get all test-suites data"
+      summary: "Get test-suite data"
       description: "Get data for chosen test-suite"
       operationId: "getTestSuite"
       security:
@@ -482,7 +482,7 @@ paths:
                 properties:
                   message:
                     type: "string"
-                    example: "Test suite does not exist"
+                    example: "Test suite doesn't exist"
     put:
       tags: 
       - "test-suite"
@@ -532,7 +532,7 @@ paths:
                 properties:
                   message:
                     type: "string"
-                    example: "Test suite does not exist"
+                    example: "Test suite doesn't exist"
         415:
             description: "Incorrect content type"
             content:
