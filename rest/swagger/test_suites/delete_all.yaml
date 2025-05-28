@@ -1,0 +1,27 @@
+summary: Delete all test suites
+description: Removes all test suites from the system
+operationId: deleteAllTestSuites
+tags:
+  - Test Suites
+security:
+  - Bearer: []
+parameters:
+  - name: body
+    in: body
+    required: false
+    schema:
+      type: object
+      properties:
+        force:
+          type: boolean
+          description: If true, deletes all suites and their test cases
+responses:
+  '200':
+    description: Test suites deleted successfully
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+  '415':
+    description: Invalid content type

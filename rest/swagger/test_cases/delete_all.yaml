@@ -1,0 +1,15 @@
+summary: Delete all test cases
+description: Removes all test cases from the system
+operationId: deleteAllTestCases
+tags:
+  - Test Cases
+security:
+  - Bearer: []
+responses:
+  '200':
+    description: All test cases deleted successfully
+    schema:
+      type: object
+      properties:
+        message:
+          type: string

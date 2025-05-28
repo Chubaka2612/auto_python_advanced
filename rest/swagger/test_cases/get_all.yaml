@@ -1,0 +1,26 @@
+summary: Get all test cases
+description: Retrieves all test cases from the system
+operationId: getAllTestCases
+tags:
+  - Test Cases
+security:
+  - Bearer: []
+responses:
+  '200':
+    description: List of all test cases
+    schema:
+      type: object
+      properties:
+        test_cases:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              suiteID:
+                type: string
+              title:
+                type: string
+              description:
+                type: string

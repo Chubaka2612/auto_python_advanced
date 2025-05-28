@@ -1,0 +1,45 @@
+summary: Create a new test case
+description: Creates a new test case and associates it with a test suite
+operationId: createTestCase
+tags:
+  - Test Cases
+security:
+  - Bearer: []
+parameters:
+  - name: body
+    in: body
+    required: true
+    schema:
+      type: object
+      properties:
+        suiteID:
+          type: string
+          description: ID of the test suite to connect this case to
+        title:
+          type: string
+          description: Name of the test case
+        description:
+          type: string
+          description: Short description of the test case
+      required:
+        - suiteID
+        - title
+        - description
+responses:
+  '200':
+    description: Test case created successfully
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+        id:
+          type: string
+  '400':
+    description: Bad request body
+  '404':
+    description: Test suite not found
+  '409':
+    description: Test case already exists
+  '415':
+    description: Invalid content type

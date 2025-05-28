@@ -1,0 +1,36 @@
+summary: Delete a test suite
+description: Removes a single test suite by ID
+operationId: deleteTestSuite
+tags:
+  - Test Suites
+security:
+  - Bearer: []
+parameters:
+  - name: test_suite_id
+    in: path
+    required: true
+    type: string
+    description: ID of the test suite to delete
+  - name: body
+    in: body
+    required: false
+    schema:
+      type: object
+      properties:
+        force:
+          type: boolean
+          description: If true, deletes the suite and all linked test cases
+responses:
+  '200':
+    description: Test suite deleted successfully
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+  '404':
+    description: Test suite not found
+  '409':
+    description: Cannot delete suite with linked test cases (force=false)
+  '415':
+    description: Invalid content type
