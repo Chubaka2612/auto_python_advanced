@@ -7,24 +7,110 @@ from flask_jwt_extended import JWTManager, jwt_required, create_access_token
 from common.configs_handler import Config
 from rest.redis_storage.test_case_instance import TestCaseRedis
 from rest.redis_storage.test_suite_instance import TestSuiteRedis
+from flasgger import Swagger
+from flasgger import swag_from
+
 
 server_data = Config().get()
 
 # Redis instances
-case_redis = TestCaseRedis(server_data['hash_names']['test_case'])
-suite_redis = TestSuiteRedis(server_data['hash_names']['test_suite'])
+case_redis = TestCaseRedis(server_data["hash_names"]["test_case"])
+suite_redis = TestSuiteRedis(server_data["hash_names"]["test_suite"])
 
 # Flask
 app = Flask(__name__)
-cors = CORS(app,
-            resources={r"/api/*": {"origins": ["http://127.0.0.1:5000", "https://editor.swagger.io"]}},
-            supports_credentials=True)
-app.config['CORS_HEADERS'] = 'Content-Type'
 
-app.config['JWT_SECRET_KEY'] = server_data['jwt_secrete_key']
+# Swagger configuration
+template = {
+    "swagger": "2.0",
+    "info": {
+        "title": "Test Management System API",
+        "description": "API for managing test cases and test suites",
+        "version": "1.0.0",
+    },
+    "securityDefinitions": {
+        "Bearer": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header",
+            "description": 'JWT Authorization header using the Bearer scheme. Example: "Bearer eyJ..."',
+        }
+    },
+    "security": [{"Bearer": []}],
+    "basePath": "/api/v1",
+    "schemes": ["http", "https"],
+    "consumes": ["application/json"],
+    "produces": ["application/json"],
+}
+
+app.config["SWAGGER"] = {
+    "title": "Test Management System API",
+    "doc_dir": "./swagger/",
+    "uiversion": 3,
+    "securityDefinitions": {
+        "Bearer": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header",
+            "description": 'JWT Authorization header using the Bearer scheme. Example: "Bearer eyJ..."',
+        }
+    },
+    "security": [{"Bearer": []}],
+    "swagger_ui_bundle_js": "https://unpkg.com/swagger-ui-dist@3/swagger-ui-bundle.js",
+    "swagger_ui_standalone_preset_js": "https://unpkg.com/swagger-ui-dist@3/swagger-ui-standalone-preset.js",
+    "swagger_ui_css": "https://unpkg.com/swagger-ui-dist@3/swagger-ui.css",
+    "swagger_ui_config": {
+        "deepLinking": True,
+        "displayRequestDuration": True,
+        "filter": True,
+        "showExtensions": True,
+    },
+}
+
+swagger_config = {
+    "headers": [
+        ("Access-Control-Allow-Origin", "*"),
+        ("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS"),
+        ("Access-Control-Allow-Credentials", "true"),
+    ],
+    "specs": [
+        {
+            "endpoint": "apispec",
+            "route": "/apispec.json",
+            "rule_filter": lambda rule: True,
+            "model_filter": lambda tag: True,
+            "template": template,
+        }
+    ],
+    "static_url_path": "/flasgger_static",
+    "swagger_ui": True,
+    "specs_route": "/apidocs/",
+    "swagger_ui_config": {
+        "defaultModelsExpandDepth": -1,
+        "operationsSorter": "alpha",
+        "docExpansion": "list",
+        "filter": True,
+        "showExtensions": False,
+        "showCommonExtensions": False,
+        "displayRequestDuration": False,
+    },
+}
+
+swagger = Swagger(app, config=swagger_config)
+
+cors = CORS(
+    app,
+    resources={
+        r"/api/*": {"origins": ["http://127.0.0.1:5000", "https://editor.swagger.io"]}
+    },
+    supports_credentials=True,
+)
+app.config["CORS_HEADERS"] = "Content-Type"
+
+app.config["JWT_SECRET_KEY"] = server_data["jwt_secrete_key"]
 jwt = JWTManager(app)
 
-valid_user = server_data['valid_user']
+valid_user = server_data["valid_user"]
 
 
 @app.route("/api/v1/")
@@ -33,7 +119,8 @@ def index():
     return jsonify(message="Simple Test Management System API"), 200
 
 
-@app.route('/api/v1/login', methods=['POST'])
+@app.route("/api/v1/login", methods=["POST"])
+@swag_from("./swagger/auth/login.yaml")
 def login():
     """Login to the server.
 
@@ -50,7 +137,7 @@ def login():
     if not (username and password):
         return jsonify(message="Bad request body"), 400
 
-    if username != valid_user['name'] or password != valid_user['password']:
+    if username != valid_user["name"] or password != valid_user["password"]:
         return jsonify(message="No such username or password"), 401
 
     access_token = create_access_token(identity=username)
@@ -58,8 +145,9 @@ def login():
 
 
 # NOTE: Test case routes
-@app.route("/api/v1/test_cases", methods=['GET'])
+@app.route("/api/v1/test_cases", methods=["GET"])
 @jwt_required()
+@swag_from("./swagger/test_cases/get_all.yaml")
 def get_all_test_cases():
     """Get all test cases data.
 
@@ -69,8 +157,9 @@ def get_all_test_cases():
     return jsonify(test_cases=test_cases), 200
 
 
-@app.route("/api/v1/test_cases/<test_case_id>", methods=['GET'])
+@app.route("/api/v1/test_cases/<test_case_id>", methods=["GET"])
 @jwt_required()
+@swag_from("./swagger/test_cases/get_one.yaml")
 def get_test_case(test_case_id):
     """Get test case data.
 
@@ -83,8 +172,9 @@ def get_test_case(test_case_id):
     return jsonify(test_case=test_case), 200
 
 
-@app.route("/api/v1/test_cases", methods=['POST'])
+@app.route("/api/v1/test_cases", methods=["POST"])
 @jwt_required()
+@swag_from("./swagger/test_cases/create.yaml")
 def post_test_case():
     """Create new test case.
 
@@ -105,24 +195,24 @@ def post_test_case():
     data = request.json
 
     # Verify request body
-    if not all([item in data for item in
-                server_data['requests']['body']['test_case']]):
+    if not all([item in data for item in server_data["requests"]["body"]["test_case"]]):
         return jsonify(message="Bad request body"), 400
 
-    if not suite_redis.is_item_exists(data['suiteID']):
+    if not suite_redis.is_item_exists(data["suiteID"]):
         return jsonify(message="Test suite doesn't exist"), 404
 
     result = case_redis.add(data)
     if result is None:
         return jsonify(message="Test case already exist"), 409
 
-    suite_redis.update_cases(data['suiteID'], result, '+')
-    suite_redis.update_length(data['suiteID'], "+")
+    suite_redis.update_cases(data["suiteID"], result, "+")
+    suite_redis.update_length(data["suiteID"], "+")
     return jsonify(message="Test case successfully added", id=result), 200
 
 
-@app.route("/api/v1/test_cases", methods=['DELETE'])
+@app.route("/api/v1/test_cases", methods=["DELETE"])
 @jwt_required()
+@swag_from("./swagger/test_cases/delete_all.yaml")
 def delete_all_test_cases():
     """All test cases deletion.
 
@@ -131,15 +221,16 @@ def delete_all_test_cases():
     case_list = case_redis.get_all()
 
     for case in case_list:
-        suite_redis.update_cases(case['suiteID'], case['id'], '-')
-        suite_redis.update_length(case['suiteID'], "-")
+        suite_redis.update_cases(case["suiteID"], case["id"], "-")
+        suite_redis.update_length(case["suiteID"], "-")
 
     case_redis.delete_all()
     return jsonify(message="All test cases successfully deleted"), 200
 
 
-@app.route("/api/v1/test_cases/<test_case_id>", methods=['PUT'])
+@app.route("/api/v1/test_cases/<test_case_id>", methods=["PUT"])
 @jwt_required()
+@swag_from("./swagger/test_cases/update.yaml")
 def put_test_case(test_case_id):
     """Update existing test case data.
 
@@ -161,8 +252,7 @@ def put_test_case(test_case_id):
     data = request.json
 
     # Verify request body
-    if not all([item in data for item in
-                server_data['requests']['body']['test_case']]):
+    if not all([item in data for item in server_data["requests"]["body"]["test_case"]]):
         return jsonify(message="Bad request body"), 400
 
     if not case_redis.update(test_case_id, data):
@@ -171,8 +261,9 @@ def put_test_case(test_case_id):
     return jsonify(message="Test case successfully updated"), 200
 
 
-@app.route("/api/v1/test_cases/<test_case_id>", methods=['DELETE'])
+@app.route("/api/v1/test_cases/<test_case_id>", methods=["DELETE"])
 @jwt_required()
+@swag_from("./swagger/test_cases/delete_one.yaml")
 def delete_test_case(test_case_id):
     """Test case deletion.
 
@@ -186,14 +277,15 @@ def delete_test_case(test_case_id):
 
     case_redis.delete(test_case_id)
 
-    suite_redis.update_cases(suite_id, test_case_id, '-')
+    suite_redis.update_cases(suite_id, test_case_id, "-")
     suite_redis.update_length(suite_id, "-")
     return jsonify(message="Test case successfully deleted"), 200
 
 
 # NOTE: Test Suite routes
-@app.route("/api/v1/test_suites", methods=['GET'])
+@app.route("/api/v1/test_suites", methods=["GET"])
 @jwt_required()
+@swag_from("./swagger/test_suites/get_all.yaml")
 def get_all_test_suites():
     """Get all test suites data.
 
@@ -203,8 +295,9 @@ def get_all_test_suites():
     return jsonify(test_suites=test_suites), 200
 
 
-@app.route("/api/v1/test_suites/<test_suite_id>", methods=['GET'])
+@app.route("/api/v1/test_suites/<test_suite_id>", methods=["GET"])
 @jwt_required()
+@swag_from("./swagger/test_suites/get_one.yaml")
 def get_test_suite(test_suite_id):
     """Get test suite data.
 
@@ -218,8 +311,9 @@ def get_test_suite(test_suite_id):
     return jsonify(test_suite=test_suite), 200
 
 
-@app.route("/api/v1/test_suites", methods=['POST'])
+@app.route("/api/v1/test_suites", methods=["POST"])
 @jwt_required()
+@swag_from("./swagger/test_suites/create.yaml")
 def post_test_suite():
     """Create test suite record.
 
@@ -235,8 +329,9 @@ def post_test_suite():
     data = request.json
 
     # Verify request body
-    if not all([item in data for item in
-                server_data['requests']['body']['test_suite']]):
+    if not all(
+        [item in data for item in server_data["requests"]["body"]["test_suite"]]
+    ):
         return jsonify(message="Bad request body"), 400
 
     result = suite_redis.add(data)
@@ -247,8 +342,9 @@ def post_test_suite():
     return jsonify(message="Test suite successfully added", id=result), 200
 
 
-@app.route("/api/v1/test_suites", methods=['DELETE'])
+@app.route("/api/v1/test_suites", methods=["DELETE"])
 @jwt_required()
+@swag_from("./swagger/test_suites/delete_all.yaml")
 def delete_all_test_suites():
     """Delete test suite.
 
@@ -256,25 +352,26 @@ def delete_all_test_suites():
     """
     if request.data:
         if request.content_type != "application/json":
-            return jsonify(
-                message="Content-type must be application/json"), 415
+            return jsonify(message="Content-type must be application/json"), 415
 
         if request.json.get("force"):
             case_redis.delete_all()
             suite_redis.delete_all()
             return jsonify(
-                message="All test cases and suites successfully deleted"), 200
+                message="All test cases and suites successfully deleted"
+            ), 200
 
     suite_list = suite_redis.get_all()
     for suite in suite_list:
-        if not suite['cases']:
-            suite_redis.delete(suite['id'])
+        if not suite["cases"]:
+            suite_redis.delete(suite["id"])
 
     return jsonify(message="Empty test suites successfully deleted"), 200
 
 
-@app.route("/api/v1/test_suites/<test_suite_id>", methods=['PUT'])
+@app.route("/api/v1/test_suites/<test_suite_id>", methods=["PUT"])
 @jwt_required()
+@swag_from("./swagger/test_suites/update.yaml")
 def put_test_suite(test_suite_id):
     """Update existing test suite data.
 
@@ -291,8 +388,9 @@ def put_test_suite(test_suite_id):
     data = request.json
 
     # Verify request body
-    if not all([item in data for item in
-                server_data['requests']['body']['test_suite']]):
+    if not all(
+        [item in data for item in server_data["requests"]["body"]["test_suite"]]
+    ):
         return jsonify(message="Bad request body"), 400
 
     if not suite_redis.update(test_suite_id, data):
@@ -301,23 +399,23 @@ def put_test_suite(test_suite_id):
     return jsonify(message="Test suite successfully updated"), 200
 
 
-@app.route("/api/v1/test_suites/<test_suite_id>", methods=['DELETE'])
+@app.route("/api/v1/test_suites/<test_suite_id>", methods=["DELETE"])
 @jwt_required()
+@swag_from("./swagger/test_suites/delete_one.yaml")
 def delete_test_suite(test_suite_id):
     """Delete test suite.
 
     :param test_suite_id: id of test suite
     :return: {message:<str>}
     """
-    linked_cases = suite_redis.get_record_data(test_suite_id)['cases']
+    linked_cases = suite_redis.get_record_data(test_suite_id)["cases"]
 
     if not suite_redis.is_item_exists(test_suite_id):
         return jsonify(message="Test suite doesn't exist"), 404
 
     if request.data:
         if request.content_type != "application/json":
-            return jsonify(
-                message="Content-type must be application/json"), 415
+            return jsonify(message="Content-type must be application/json"), 415
 
         data = request.json
 
@@ -326,8 +424,9 @@ def delete_test_suite(test_suite_id):
             if not force:
                 return jsonify(
                     message="Unable to delete test suite with linked test "
-                            "cases.\nPlease, use 'Force':True option to "
-                            "delete suite and all test cases in it"), 409
+                    "cases.\nPlease, use 'Force':True option to "
+                    "delete suite and all test cases in it"
+                ), 409
             if force:
                 for case_id in linked_cases:
                     delete_test_case(case_id)
@@ -336,8 +435,17 @@ def delete_test_suite(test_suite_id):
     return jsonify(message="Test suite successfully deleted"), 200
 
 
+@app.errorhandler(500)
+def handle_internal_error(error):
+    """Handle internal server errors and provide more context."""
+    app.logger.error(f"Internal Server Error: {error}")
+    return jsonify(error=str(error)), 500
+
+
 def start_flask_server():
     """Start Flask server."""
-    app.run(host=server_data.get('host', 'localhost'),
-            port=server_data.get('port', 5000),
-            debug=True)
+    app.run(
+        host=server_data.get("host", "localhost"),
+        port=server_data.get("port", 5000),
+        debug=True,
+    )

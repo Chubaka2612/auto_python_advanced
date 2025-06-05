@@ -1,0 +1,38 @@
+summary: Update a test suite
+description: Updates the data of an existing test suite
+operationId: updateTestSuite
+tags:
+  - Test Suites
+security:
+  - Bearer: []
+parameters:
+  - name: test_suite_id
+    in: path
+    required: true
+    type: string
+    description: ID of the test suite to update
+  - name: body
+    in: body
+    required: true
+    schema:
+      type: object
+      properties:
+        title:
+          type: string
+          description: New title for the test suite
+      required:
+        - title
+responses:
+  '200':
+    description: Test suite updated successfully
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+  '400':
+    description: Bad request body
+  '404':
+    description: Test suite not found
+  '415':
+    description: Invalid content type

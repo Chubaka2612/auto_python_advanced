@@ -1,0 +1,29 @@
+summary: Get all test suites
+description: Retrieves all test suites from the system
+operationId: getAllTestSuites
+tags:
+  - Test Suites
+security:
+  - Bearer: []
+responses:
+  '200':
+    description: List of all test suites
+    schema:
+      type: object
+      properties:
+        test_suites:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              title:
+                type: string
+              cases:
+                type: array
+                items:
+                  type: string
+                description: List of test case IDs
+              length:
+                type: integer

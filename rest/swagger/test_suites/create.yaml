@@ -1,0 +1,35 @@
+summary: Create a new test suite
+description: Creates a new test suite in the system
+operationId: createTestSuite
+tags:
+  - Test Suites
+security:
+  - Bearer: []
+parameters:
+  - name: body
+    in: body
+    required: true
+    schema:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Name of the test suite
+      required:
+        - title
+responses:
+  '200':
+    description: Test suite created successfully
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+        id:
+          type: string
+  '400':
+    description: Bad request body
+  '409':
+    description: Test suite already exists
+  '415':
+    description: Invalid content type

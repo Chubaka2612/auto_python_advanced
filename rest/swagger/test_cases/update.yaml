@@ -1,0 +1,46 @@
+summary: Update an existing test case
+description: Updates the data of an existing test case
+operationId: updateTestCase
+tags:
+  - Test Cases
+security:
+  - Bearer: []
+parameters:
+  - name: test_case_id
+    in: path
+    required: true
+    type: string
+    description: ID of the test case to update
+  - name: body
+    in: body
+    required: true
+    schema:
+      type: object
+      properties:
+        suiteID:
+          type: string
+          description: ID of the test suite this case belongs to
+        title:
+          type: string
+          description: Updated name of the test case
+        description:
+          type: string
+          description: Updated description of the test case
+      required:
+        - suiteID
+        - title
+        - description
+responses:
+  '200':
+    description: Test case updated successfully
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+  '400':
+    description: Bad request body
+  '404':
+    description: Test case not found
+  '415':
+    description: Invalid content type

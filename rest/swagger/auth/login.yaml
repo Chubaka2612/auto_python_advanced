@@ -1,0 +1,36 @@
+summary: Login to get JWT token
+description: Authenticate and get a JWT Bearer token for API access
+operationId: login
+tags:
+  - Authentication
+parameters:
+  - name: body
+    in: body
+    required: true
+    schema:
+      type: object
+      properties:
+        username:
+          type: string
+          description: Username for authentication
+        password:
+          type: string
+          description: Password for authentication
+      required:
+        - username
+        - password
+responses:
+  '200':
+    description: Successful login
+    schema:
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: JWT token for authentication
+  '400':
+    description: Bad request body
+  '401':
+    description: Invalid credentials
+  '415':
+    description: Invalid content type
