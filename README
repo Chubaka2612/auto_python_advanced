@@ -69,22 +69,22 @@ Application usage:
 API calls:
     
     Default base url for REST: http://{host}:5000/api/v1
-    
-    Detailed information about API calls is placed in "e3_api.yaml" swagger or e3_api.pdf files. 
-    This files are placed in /docs/api folder of current project.
-    
+        
     Application supports all default Flask server and several custom (which are
     described in API doc) responses.
     
-    How to open PDF file: Simply open it in preferable pdf viewer
+    Detailed information about API calls is available in Swagger documentation.
     
-    How to use SWAGGER:
-    
+    How to use Swagger: run your the application and visit http://{host}:5000/apidocs
+
+    Alternatively you may use Swagger online Editor:
+        
         1. Open Swagger online Editor.
         Link: https://editor.swagger.io/
         
         2. Open swagger YAML/JSON file if it exists:
-            - at the top menu press "file"->"import file", browse to the file and open it
+            - at the top menu press "file"->"import file"
+            - Browse to the "/docs/api/e3_api.yaml" file and use it 
         
         Note: If you want to create a new API doc, simply remove data in the left subwindow
         
@@ -95,3 +95,5 @@ API calls:
             - Data Types
             - Usage examples
             - Etc.
+
+    [OUTDATED] As the last option you may use PDF file containg pre-rendered Swagger definition at "/docs/api/e3_api.pdf".
