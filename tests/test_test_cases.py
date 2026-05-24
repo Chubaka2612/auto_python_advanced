@@ -1,14 +1,18 @@
 # Test case CRUD tests
+import uuid
+
 import pytest
 
-SUITE_TITLE = "Test Suite for Cases"
+pytestmark = pytest.mark.xdist_group("data")
+
 CASE_TITLE = "Login Functionality Test"
 CASE_DESCRIPTION = "Tests the POST /login endpoint"
 
 
 @pytest.fixture
 def created_suite(test_suites_endpoint):
-    response = test_suites_endpoint.post({"title": SUITE_TITLE})
+    unique_title = f"Test Suite for Cases {uuid.uuid4().hex[:8]}"
+    response = test_suites_endpoint.post({"title": unique_title})
     assert response.status_code == 200, f"Suite creation failed: {response.text}"
     suite_id = response.json()["id"]
     yield suite_id

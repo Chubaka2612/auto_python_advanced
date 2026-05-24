@@ -1,12 +1,15 @@
 # Test suite CRUD tests
+import uuid
+
 import pytest
 
-SUITE_TITLE = "API Test Suite"
+pytestmark = pytest.mark.xdist_group("data")
 
 
 @pytest.fixture
 def created_suite(test_suites_endpoint):
-    response = test_suites_endpoint.post({"title": SUITE_TITLE})
+    unique_title = f"API Test Suite {uuid.uuid4().hex[:8]}"
+    response = test_suites_endpoint.post({"title": unique_title})
     assert response.status_code == 200, f"Suite creation failed: {response.text}"
     suite_id = response.json()["id"]
     yield suite_id
@@ -15,7 +18,7 @@ def created_suite(test_suites_endpoint):
 
 @pytest.mark.test_id("TC06")
 def test_post_test_suite_create(test_suites_endpoint):
-    response = test_suites_endpoint.post({"title": SUITE_TITLE})
+    response = test_suites_endpoint.post({"title": f"API Test Suite {uuid.uuid4().hex[:8]}"})
     assert response.status_code == 200
     body = response.json()
     assert "id" in body
