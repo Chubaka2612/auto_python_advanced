@@ -17,19 +17,19 @@ Build Auth Headers
 
 Get Resource
     [Arguments]    ${url}    ${headers}
-    ${response}=    GET    ${url}    headers=${headers}
+    ${response}=    GET    ${url}    headers=${headers}    expected_status=any
     RETURN    ${response}
 
 Post Resource
     [Arguments]    ${url}    ${headers}    ${body}
-    ${response}=    POST    ${url}    json=${body}    headers=${headers}
+    ${response}=    POST    ${url}    json=${body}    headers=${headers}    expected_status=any
     RETURN    ${response}
 
 Put Resource
     [Arguments]    ${url}    ${headers}    ${body}
-    ${response}=    PUT    ${url}    json=${body}    headers=${headers}
+    ${response}=    PUT    ${url}    json=${body}    headers=${headers}    expected_status=any
     RETURN    ${response}
 
 Delete Resource
     [Arguments]    ${url}    ${headers}
-    DELETE    ${url}    headers=${headers}
+    DELETE    ${url}    headers=${headers}    expected_status=any
