@@ -1,0 +1,16 @@
+--suite Robot Tests.Test Suites.Test Suites
+--variable CALLER_ID:f24707515835460a897736ed7de18a1e
+--variable PABOTLIBURI:127.0.0.1:8270
+--variable PABOTEXECUTIONPOOLID:0
+--variable PABOTISLASTEXECUTIONINPOOL:1
+--variable PABOTNUMBEROFPROCESSES:2
+--variable PABOTQUEUEINDEX:2
+--variable PABOTLASTLEVEL:
+--outputdir robot_tests/results\pabot_results\2
+--output output.xml
+--log NONE
+--report NONE
+--xunit NONE
+--consolecolors off
+--consolemarkers off
+robot_tests/

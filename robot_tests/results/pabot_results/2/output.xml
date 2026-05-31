@@ -1,0 +1,882 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.4.2 (Python 3.12.2 on win32)" generated="2026-05-31T20:28:35.802335" rpa="false" schemaversion="5">
+<suite id="s1" name="Robot Tests" source="C:\MY_WORK_SPACE\SelfStudy\Job\Phyton\adpyauto\robot_tests">
+<suite id="s1-s1" name="Test Suites" source="C:\MY_WORK_SPACE\SelfStudy\Job\Phyton\adpyauto\robot_tests\test_suites">
+<suite id="s1-s1-s1" name="Test Suites" source="C:\MY_WORK_SPACE\SelfStudy\Job\Phyton\adpyauto\robot_tests\test_suites\test_suites.robot">
+<kw name="Authenticate" type="SETUP">
+<kw name="Get Auth Token" owner="api">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-05-31T20:28:36.439733" level="INFO">${body} = {'username': 'test', 'password': 'test'}</msg>
+<var>${body}</var>
+<arg>username=${USERNAME}</arg>
+<arg>password=${PASSWORD}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.439217" elapsed="0.000516"/>
+</kw>
+<kw name="POST" owner="RequestsLibrary">
+<msg time="2026-05-31T20:28:36.486433" level="INFO">POST Request : url=http://localhost:5000/api/v1/login 
+ path_url=/api/v1/login 
+ headers={'User-Agent': 'python-requests/2.33.1', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'Content-Length': '40'} 
+ body=b'{"username": "test", "password": "test"}' 
+ </msg>
+<msg time="2026-05-31T20:28:36.486433" level="INFO">POST Response : url=http://localhost:5000/api/v1/login 
+ status=200, reason=OK 
+ headers={'Server': 'Werkzeug/3.1.8 Python/3.12.13', 'Date': 'Sun, 31 May 2026 17:28:42 GMT', 'Content-Type': 'application/json', 'Content-Length': '354', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': 'true', 'Vary': 'Origin', 'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS', 'Connection': 'close'} 
+ body={
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc4MDI0ODUyMiwianRpIjoiYTJhN2UwNGMtNWNhMC00Y2NjLTljODUtYTQ2YmM5ZTE2ZjI4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3ODAyNDg1MjIsImNzcmYiOiJiYjBlNGVhNS0zM2JmLTQxNjItOGE0MC1hZDZlODcxOTc1MWYiLCJleHAiOjE3ODAyNDk0MjJ9.MQGKxYxBA6JdhTeCp2CbjXnnaEwn8M7iVyMMw7txX9s"
+}
+ 
+ </msg>
+<msg time="2026-05-31T20:28:36.486951" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>${LOGIN_URL}</arg>
+<arg>json=${body}</arg>
+<arg>headers=${JSON_HEADER}</arg>
+<arg>expected_status=200</arg>
+<doc>Sends a POST request.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.440777" elapsed="0.046174"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-05-31T20:28:36.488030" level="INFO">${json} = {'access_token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc4MDI0ODUyMiwianRpIjoiYTJhN2UwNGMtNWNhMC00Y2NjLTljODUtYTQ2YmM5ZTE2ZjI4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuY...</msg>
+<var>${json}</var>
+<arg>${response.json()}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.486951" elapsed="0.001079"/>
+</kw>
+<return>
+<value>${json}[access_token]</value>
+<status status="PASS" start="2026-05-31T20:28:36.488030" elapsed="0.000000"/>
+</return>
+<msg time="2026-05-31T20:28:36.489120" level="INFO">${token} = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc4MDI0ODUyMiwianRpIjoiYTJhN2UwNGMtNWNhMC00Y2NjLTljODUtYTQ2YmM5ZTE2ZjI4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3ODAyNDg1MjI...</msg>
+<var>${token}</var>
+<status status="PASS" start="2026-05-31T20:28:36.438185" elapsed="0.050935"/>
+</kw>
+<kw name="Build Auth Headers" owner="api">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-05-31T20:28:36.490087" level="INFO">${headers} = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc4MDI0ODUyMiwianRpIjoiYTJhN2UwNGMtNWNhMC00Y2NjLTljODUtYTQ2YmM5ZTE2ZjI4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc...</msg>
+<var>${headers}</var>
+<arg>Authorization=Bearer ${token}</arg>
+<arg>Content-Type=application/json</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.489120" elapsed="0.000967"/>
+</kw>
+<return>
+<value>${headers}</value>
+<status status="PASS" start="2026-05-31T20:28:36.490087" elapsed="0.000000"/>
+</return>
+<msg time="2026-05-31T20:28:36.490989" level="INFO">${headers} = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc4MDI0ODUyMiwianRpIjoiYTJhN2UwNGMtNWNhMC00Y2NjLTljODUtYTQ2YmM5ZTE2ZjI4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc...</msg>
+<var>${headers}</var>
+<arg>${token}</arg>
+<status status="PASS" start="2026-05-31T20:28:36.489120" elapsed="0.001869"/>
+</kw>
+<kw name="Set Suite Variable" owner="BuiltIn">
+<msg time="2026-05-31T20:28:36.490989" level="INFO">${AUTH_HEADERS} = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc4MDI0ODUyMiwianRpIjoiYTJhN2UwNGMtNWNhMC00Y2NjLTljODUtYTQ2YmM5ZTE2ZjI4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc...</msg>
+<arg>${AUTH_HEADERS}</arg>
+<arg>${headers}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.490989" elapsed="0.000000"/>
+</kw>
+<status status="PASS" start="2026-05-31T20:28:36.436633" elapsed="0.054356"/>
+</kw>
+<test id="s1-s1-s1-t1" name="TC06 POST Create Test Suite" line="13">
+<kw name="Generate Unique Title">
+<kw name="Generate Random String" owner="String">
+<msg time="2026-05-31T20:28:36.494082" level="INFO">${suffix} = c0wi4rz8</msg>
+<var>${suffix}</var>
+<arg>8</arg>
+<arg>[LOWER][NUMBERS]</arg>
+<doc>Generates a string with a desired ``length`` from the given ``chars``.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.492999" elapsed="0.001083"/>
+</kw>
+<return>
+<value>${prefix} ${suffix}</value>
+<status status="PASS" start="2026-05-31T20:28:36.494082" elapsed="0.000000"/>
+</return>
+<msg time="2026-05-31T20:28:36.494082" level="INFO">${title} = API Test Suite c0wi4rz8</msg>
+<var>${title}</var>
+<arg>API Test Suite</arg>
+<status status="PASS" start="2026-05-31T20:28:36.492999" elapsed="0.001083"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-05-31T20:28:36.494082" level="INFO">${body} = {'title': 'API Test Suite c0wi4rz8'}</msg>
+<var>${body}</var>
+<arg>title=${title}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.494082" elapsed="0.000000"/>
+</kw>
+<kw name="Post Resource" owner="api">
+<kw name="POST" owner="RequestsLibrary">
+<msg time="2026-05-31T20:28:36.510701" level="INFO">POST Request : url=http://localhost:5000/api/v1/test_suites 
+ path_url=/api/v1/test_suites 
+ headers={'User-Agent': 'python-requests/2.33.1', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc4MDI0ODUyMiwianRpIjoiYTJhN2UwNGMtNWNhMC00Y2NjLTljODUtYTQ2YmM5ZTE2ZjI4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3ODAyNDg1MjIsImNzcmYiOiJiYjBlNGVhNS0zM2JmLTQxNjItOGE0MC1hZDZlODcxOTc1MWYiLCJleHAiOjE3ODAyNDk0MjJ9.MQGKxYxBA6JdhTeCp2CbjXnnaEwn8M7iVyMMw7txX9s', 'Content-Type': 'application/json', 'Content-Length': '36'} 
+ body=b'{"title": "API Test Suite c0wi4rz8"}' 
+ </msg>
+<msg time="2026-05-31T20:28:36.510701" level="INFO">POST Response : url=http://localhost:5000/api/v1/test_suites 
+ status=200, reason=OK 
+ headers={'Server': 'Werkzeug/3.1.8 Python/3.12.13', 'Date': 'Sun, 31 May 2026 17:28:42 GMT', 'Content-Type': 'application/json', 'Content-Length': '62', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': 'true', 'Vary': 'Origin', 'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS', 'Connection': 'close'} 
+ body={
+  "id": "1",
+  "message": "Test suite successfully added"
+}
+ 
+ </msg>
+<msg time="2026-05-31T20:28:36.510701" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>${url}</arg>
+<arg>json=${body}</arg>
+<arg>headers=${headers}</arg>
+<arg>expected_status=any</arg>
+<doc>Sends a POST request.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.494082" elapsed="0.017840"/>
+</kw>
+<return>
+<value>${response}</value>
+<status status="PASS" start="2026-05-31T20:28:36.511922" elapsed="0.000000"/>
+</return>
+<msg time="2026-05-31T20:28:36.512597" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>${SUITES_URL}</arg>
+<arg>${AUTH_HEADERS}</arg>
+<arg>${body}</arg>
+<status status="PASS" start="2026-05-31T20:28:36.494082" elapsed="0.018515"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-05-31T20:28:36.512597" level="INFO">${json} = {'id': '1', 'message': 'Test suite successfully added'}</msg>
+<var>${json}</var>
+<arg>${response.json()}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.512597" elapsed="0.000000"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2026-05-31T20:28:36.512597" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${response.status_code}</arg>
+<arg>200</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.512597" elapsed="0.000000"/>
+</kw>
+<kw name="Dictionary Should Contain Key" owner="Collections">
+<arg>${json}</arg>
+<arg>id</arg>
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.512597" elapsed="0.000000"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${json}[message]</arg>
+<arg>Test suite successfully added</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.512597" elapsed="0.004010"/>
+</kw>
+<kw name="Delete Resource" owner="api">
+<kw name="DELETE" owner="RequestsLibrary">
+<msg time="2026-05-31T20:28:36.559772" level="INFO">DELETE Request : url=http://localhost:5000/api/v1/test_suites/1 
+ path_url=/api/v1/test_suites/1 
+ headers={'User-Agent': 'python-requests/2.33.1', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc4MDI0ODUyMiwianRpIjoiYTJhN2UwNGMtNWNhMC00Y2NjLTljODUtYTQ2YmM5ZTE2ZjI4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3ODAyNDg1MjIsImNzcmYiOiJiYjBlNGVhNS0zM2JmLTQxNjItOGE0MC1hZDZlODcxOTc1MWYiLCJleHAiOjE3ODAyNDk0MjJ9.MQGKxYxBA6JdhTeCp2CbjXnnaEwn8M7iVyMMw7txX9s', 'Content-Type': 'application/json', 'Content-Length': '0'} 
+ body=None 
+ </msg>
+<msg time="2026-05-31T20:28:36.564307" level="INFO">DELETE Response : url=http://localhost:5000/api/v1/test_suites/1 
+ status=200, reason=OK 
+ headers={'Server': 'Werkzeug/3.1.8 Python/3.12.13', 'Date': 'Sun, 31 May 2026 17:28:42 GMT', 'Content-Type': 'application/json', 'Content-Length': '51', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': 'true', 'Vary': 'Origin', 'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS', 'Connection': 'close'} 
+ body={
+  "message": "Test suite successfully deleted"
+}
+ 
+ </msg>
+<msg time="2026-05-31T20:28:36.564307" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>${url}</arg>
+<arg>headers=${headers}</arg>
+<arg>expected_status=any</arg>
+<doc>Sends a DELETE request.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.516607" elapsed="0.047700"/>
+</kw>
+<return>
+<value>${response}</value>
+<status status="PASS" start="2026-05-31T20:28:36.564307" elapsed="0.000000"/>
+</return>
+<arg>${SUITES_URL}/${json}[id]</arg>
+<arg>${AUTH_HEADERS}</arg>
+<status status="PASS" start="2026-05-31T20:28:36.516607" elapsed="0.048758"/>
+</kw>
+<tag>TC06</tag>
+<tag>test_suites</tag>
+<status status="PASS" start="2026-05-31T20:28:36.490989" elapsed="0.074376"/>
+</test>
+<test id="s1-s1-s1-t2" name="TC09 GET All Test Suites" line="26">
+<kw name="Create Suite For Test" type="SETUP">
+<kw name="Generate Unique Title">
+<kw name="Generate Random String" owner="String">
+<msg time="2026-05-31T20:28:36.566372" level="INFO">${suffix} = 7iawwjjc</msg>
+<var>${suffix}</var>
+<arg>8</arg>
+<arg>[LOWER][NUMBERS]</arg>
+<doc>Generates a string with a desired ``length`` from the given ``chars``.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.566372" elapsed="0.000000"/>
+</kw>
+<return>
+<value>${prefix} ${suffix}</value>
+<status status="PASS" start="2026-05-31T20:28:36.566372" elapsed="0.000000"/>
+</return>
+<msg time="2026-05-31T20:28:36.566372" level="INFO">${title} = API Test Suite RF 7iawwjjc</msg>
+<var>${title}</var>
+<arg>API Test Suite RF</arg>
+<status status="PASS" start="2026-05-31T20:28:36.566372" elapsed="0.000000"/>
+</kw>
+<kw name="Create Suite" owner="entities">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-05-31T20:28:36.568899" level="INFO">${body} = {'title': 'API Test Suite RF 7iawwjjc'}</msg>
+<var>${body}</var>
+<arg>title=${title}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.568899" elapsed="0.000000"/>
+</kw>
+<kw name="Post Resource" owner="api">
+<kw name="POST" owner="RequestsLibrary">
+<msg time="2026-05-31T20:28:36.689824" level="INFO">POST Request : url=http://localhost:5000/api/v1/test_suites 
+ path_url=/api/v1/test_suites 
+ headers={'User-Agent': 'python-requests/2.33.1', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc4MDI0ODUyMiwianRpIjoiYTJhN2UwNGMtNWNhMC00Y2NjLTljODUtYTQ2YmM5ZTE2ZjI4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3ODAyNDg1MjIsImNzcmYiOiJiYjBlNGVhNS0zM2JmLTQxNjItOGE0MC1hZDZlODcxOTc1MWYiLCJleHAiOjE3ODAyNDk0MjJ9.MQGKxYxBA6JdhTeCp2CbjXnnaEwn8M7iVyMMw7txX9s', 'Content-Type': 'application/json', 'Content-Length': '39'} 
+ body=b'{"title": "API Test Suite RF 7iawwjjc"}' 
+ </msg>
+<msg time="2026-05-31T20:28:36.689824" level="INFO">POST Response : url=http://localhost:5000/api/v1/test_suites 
+ status=200, reason=OK 
+ headers={'Server': 'Werkzeug/3.1.8 Python/3.12.13', 'Date': 'Sun, 31 May 2026 17:28:42 GMT', 'Content-Type': 'application/json', 'Content-Length': '62', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': 'true', 'Vary': 'Origin', 'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS', 'Connection': 'close'} 
+ body={
+  "id": "1",
+  "message": "Test suite successfully added"
+}
+ 
+ </msg>
+<msg time="2026-05-31T20:28:36.689824" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>${url}</arg>
+<arg>json=${body}</arg>
+<arg>headers=${headers}</arg>
+<arg>expected_status=any</arg>
+<doc>Sends a POST request.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.568899" elapsed="0.120925"/>
+</kw>
+<return>
+<value>${response}</value>
+<status status="PASS" start="2026-05-31T20:28:36.689824" elapsed="0.000000"/>
+</return>
+<msg time="2026-05-31T20:28:36.689824" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>${SUITES_URL}</arg>
+<arg>${headers}</arg>
+<arg>${body}</arg>
+<status status="PASS" start="2026-05-31T20:28:36.568899" elapsed="0.120925"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2026-05-31T20:28:36.689824" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${response.status_code}</arg>
+<arg>200</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.689824" elapsed="0.000000"/>
+</kw>
+<return>
+<value>${response.json()}[id]</value>
+<status status="PASS" start="2026-05-31T20:28:36.689824" elapsed="0.000000"/>
+</return>
+<msg time="2026-05-31T20:28:36.693339" level="INFO">${id} = 1</msg>
+<var>${id}</var>
+<arg>${AUTH_HEADERS}</arg>
+<arg>${title}</arg>
+<status status="PASS" start="2026-05-31T20:28:36.566372" elapsed="0.126967"/>
+</kw>
+<kw name="Set Test Variable" owner="BuiltIn">
+<msg time="2026-05-31T20:28:36.693339" level="INFO">${SUITE_ID} = 1</msg>
+<arg>${SUITE_ID}</arg>
+<arg>${id}</arg>
+<doc>Makes a variable available everywhere within the scope of the current test.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.693339" elapsed="0.000000"/>
+</kw>
+<status status="PASS" start="2026-05-31T20:28:36.566372" elapsed="0.126967"/>
+</kw>
+<kw name="Get Resource" owner="api">
+<kw name="GET" owner="RequestsLibrary">
+<msg time="2026-05-31T20:28:36.710936" level="INFO">GET Request : url=http://localhost:5000/api/v1/test_suites 
+ path_url=/api/v1/test_suites 
+ headers={'User-Agent': 'python-requests/2.33.1', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc4MDI0ODUyMiwianRpIjoiYTJhN2UwNGMtNWNhMC00Y2NjLTljODUtYTQ2YmM5ZTE2ZjI4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3ODAyNDg1MjIsImNzcmYiOiJiYjBlNGVhNS0zM2JmLTQxNjItOGE0MC1hZDZlODcxOTc1MWYiLCJleHAiOjE3ODAyNDk0MjJ9.MQGKxYxBA6JdhTeCp2CbjXnnaEwn8M7iVyMMw7txX9s', 'Content-Type': 'application/json'} 
+ body=None 
+ </msg>
+<msg time="2026-05-31T20:28:36.710936" level="INFO">GET Response : url=http://localhost:5000/api/v1/test_suites 
+ status=200, reason=OK 
+ headers={'Server': 'Werkzeug/3.1.8 Python/3.12.13', 'Date': 'Sun, 31 May 2026 17:28:42 GMT', 'Content-Type': 'application/json', 'Content-Length': '140', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': 'true', 'Vary': 'Origin', 'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS', 'Connection': 'close'} 
+ body={
+  "test_suites": [
+    {
+      "cases": [],
+      "id": "1",
+      "length": "0",
+      "title": "API Test Suite RF 7iawwjjc"
+    }
+  ]
+}
+ 
+ </msg>
+<msg time="2026-05-31T20:28:36.710936" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>${url}</arg>
+<arg>headers=${headers}</arg>
+<arg>expected_status=any</arg>
+<doc>Sends a GET request.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.693339" elapsed="0.017597"/>
+</kw>
+<return>
+<value>${response}</value>
+<status status="PASS" start="2026-05-31T20:28:36.710936" elapsed="0.000000"/>
+</return>
+<msg time="2026-05-31T20:28:36.710936" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>${SUITES_URL}</arg>
+<arg>${AUTH_HEADERS}</arg>
+<status status="PASS" start="2026-05-31T20:28:36.693339" elapsed="0.017597"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-05-31T20:28:36.713943" level="INFO">${json} = {'test_suites': [{'cases': [], 'id': '1', 'length': '0', 'title': 'API Test Suite RF 7iawwjjc'}]}</msg>
+<var>${json}</var>
+<arg>${response.json()}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.710936" elapsed="0.003007"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2026-05-31T20:28:36.713943" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${response.status_code}</arg>
+<arg>200</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.713943" elapsed="0.000000"/>
+</kw>
+<kw name="Dictionary Should Contain Key" owner="Collections">
+<arg>${json}</arg>
+<arg>test_suites</arg>
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.713943" elapsed="0.000000"/>
+</kw>
+<kw name="Should Be True" owner="BuiltIn">
+<arg>len($json['test_suites']) &gt;= 1</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.713943" elapsed="0.000000"/>
+</kw>
+<kw name="Delete Suite After Test" type="TEARDOWN">
+<kw name="Delete Suite" owner="entities">
+<kw name="Delete Resource" owner="api">
+<kw name="DELETE" owner="RequestsLibrary">
+<msg time="2026-05-31T20:28:36.728941" level="INFO">DELETE Request : url=http://localhost:5000/api/v1/test_suites/1 
+ path_url=/api/v1/test_suites/1 
+ headers={'User-Agent': 'python-requests/2.33.1', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc4MDI0ODUyMiwianRpIjoiYTJhN2UwNGMtNWNhMC00Y2NjLTljODUtYTQ2YmM5ZTE2ZjI4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3ODAyNDg1MjIsImNzcmYiOiJiYjBlNGVhNS0zM2JmLTQxNjItOGE0MC1hZDZlODcxOTc1MWYiLCJleHAiOjE3ODAyNDk0MjJ9.MQGKxYxBA6JdhTeCp2CbjXnnaEwn8M7iVyMMw7txX9s', 'Content-Type': 'application/json', 'Content-Length': '0'} 
+ body=None 
+ </msg>
+<msg time="2026-05-31T20:28:36.728941" level="INFO">DELETE Response : url=http://localhost:5000/api/v1/test_suites/1 
+ status=200, reason=OK 
+ headers={'Server': 'Werkzeug/3.1.8 Python/3.12.13', 'Date': 'Sun, 31 May 2026 17:28:42 GMT', 'Content-Type': 'application/json', 'Content-Length': '51', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': 'true', 'Vary': 'Origin', 'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS', 'Connection': 'close'} 
+ body={
+  "message": "Test suite successfully deleted"
+}
+ 
+ </msg>
+<msg time="2026-05-31T20:28:36.728941" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>${url}</arg>
+<arg>headers=${headers}</arg>
+<arg>expected_status=any</arg>
+<doc>Sends a DELETE request.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.719034" elapsed="0.009907"/>
+</kw>
+<return>
+<value>${response}</value>
+<status status="PASS" start="2026-05-31T20:28:36.732899" elapsed="0.000000"/>
+</return>
+<arg>${SUITES_URL}/${suite_id}</arg>
+<arg>${headers}</arg>
+<status status="PASS" start="2026-05-31T20:28:36.719034" elapsed="0.013865"/>
+</kw>
+<arg>${AUTH_HEADERS}</arg>
+<arg>${SUITE_ID}</arg>
+<status status="PASS" start="2026-05-31T20:28:36.713943" elapsed="0.018956"/>
+</kw>
+<status status="PASS" start="2026-05-31T20:28:36.713943" elapsed="0.018956"/>
+</kw>
+<tag>TC09</tag>
+<tag>test_suites</tag>
+<status status="PASS" start="2026-05-31T20:28:36.565365" elapsed="0.167534"/>
+</test>
+<test id="s1-s1-s1-t3" name="TC10 GET Test Suite By ID" line="34">
+<kw name="Create Suite For Test" type="SETUP">
+<kw name="Generate Unique Title">
+<kw name="Generate Random String" owner="String">
+<msg time="2026-05-31T20:28:36.734618" level="INFO">${suffix} = rmpn22sr</msg>
+<var>${suffix}</var>
+<arg>8</arg>
+<arg>[LOWER][NUMBERS]</arg>
+<doc>Generates a string with a desired ``length`` from the given ``chars``.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.734618" elapsed="0.000000"/>
+</kw>
+<return>
+<value>${prefix} ${suffix}</value>
+<status status="PASS" start="2026-05-31T20:28:36.734618" elapsed="0.000000"/>
+</return>
+<msg time="2026-05-31T20:28:36.734618" level="INFO">${title} = API Test Suite RF rmpn22sr</msg>
+<var>${title}</var>
+<arg>API Test Suite RF</arg>
+<status status="PASS" start="2026-05-31T20:28:36.734618" elapsed="0.000000"/>
+</kw>
+<kw name="Create Suite" owner="entities">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-05-31T20:28:36.739161" level="INFO">${body} = {'title': 'API Test Suite RF rmpn22sr'}</msg>
+<var>${body}</var>
+<arg>title=${title}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.734618" elapsed="0.004543"/>
+</kw>
+<kw name="Post Resource" owner="api">
+<kw name="POST" owner="RequestsLibrary">
+<msg time="2026-05-31T20:28:36.761565" level="INFO">POST Request : url=http://localhost:5000/api/v1/test_suites 
+ path_url=/api/v1/test_suites 
+ headers={'User-Agent': 'python-requests/2.33.1', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc4MDI0ODUyMiwianRpIjoiYTJhN2UwNGMtNWNhMC00Y2NjLTljODUtYTQ2YmM5ZTE2ZjI4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3ODAyNDg1MjIsImNzcmYiOiJiYjBlNGVhNS0zM2JmLTQxNjItOGE0MC1hZDZlODcxOTc1MWYiLCJleHAiOjE3ODAyNDk0MjJ9.MQGKxYxBA6JdhTeCp2CbjXnnaEwn8M7iVyMMw7txX9s', 'Content-Type': 'application/json', 'Content-Length': '39'} 
+ body=b'{"title": "API Test Suite RF rmpn22sr"}' 
+ </msg>
+<msg time="2026-05-31T20:28:36.761565" level="INFO">POST Response : url=http://localhost:5000/api/v1/test_suites 
+ status=200, reason=OK 
+ headers={'Server': 'Werkzeug/3.1.8 Python/3.12.13', 'Date': 'Sun, 31 May 2026 17:28:42 GMT', 'Content-Type': 'application/json', 'Content-Length': '62', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': 'true', 'Vary': 'Origin', 'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS', 'Connection': 'close'} 
+ body={
+  "id": "1",
+  "message": "Test suite successfully added"
+}
+ 
+ </msg>
+<msg time="2026-05-31T20:28:36.763109" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>${url}</arg>
+<arg>json=${body}</arg>
+<arg>headers=${headers}</arg>
+<arg>expected_status=any</arg>
+<doc>Sends a POST request.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.741183" elapsed="0.021926"/>
+</kw>
+<return>
+<value>${response}</value>
+<status status="PASS" start="2026-05-31T20:28:36.763109" elapsed="0.000000"/>
+</return>
+<msg time="2026-05-31T20:28:36.763109" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>${SUITES_URL}</arg>
+<arg>${headers}</arg>
+<arg>${body}</arg>
+<status status="PASS" start="2026-05-31T20:28:36.739161" elapsed="0.023948"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2026-05-31T20:28:36.765492" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${response.status_code}</arg>
+<arg>200</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.763109" elapsed="0.002383"/>
+</kw>
+<return>
+<value>${response.json()}[id]</value>
+<status status="PASS" start="2026-05-31T20:28:36.765492" elapsed="0.000621"/>
+</return>
+<msg time="2026-05-31T20:28:36.766113" level="INFO">${id} = 1</msg>
+<var>${id}</var>
+<arg>${AUTH_HEADERS}</arg>
+<arg>${title}</arg>
+<status status="PASS" start="2026-05-31T20:28:36.734618" elapsed="0.031495"/>
+</kw>
+<kw name="Set Test Variable" owner="BuiltIn">
+<msg time="2026-05-31T20:28:36.766113" level="INFO">${SUITE_ID} = 1</msg>
+<arg>${SUITE_ID}</arg>
+<arg>${id}</arg>
+<doc>Makes a variable available everywhere within the scope of the current test.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.766113" elapsed="0.000000"/>
+</kw>
+<status status="PASS" start="2026-05-31T20:28:36.734618" elapsed="0.031495"/>
+</kw>
+<kw name="Get Resource" owner="api">
+<kw name="GET" owner="RequestsLibrary">
+<msg time="2026-05-31T20:28:36.797133" level="INFO">GET Request : url=http://localhost:5000/api/v1/test_suites/1 
+ path_url=/api/v1/test_suites/1 
+ headers={'User-Agent': 'python-requests/2.33.1', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc4MDI0ODUyMiwianRpIjoiYTJhN2UwNGMtNWNhMC00Y2NjLTljODUtYTQ2YmM5ZTE2ZjI4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3ODAyNDg1MjIsImNzcmYiOiJiYjBlNGVhNS0zM2JmLTQxNjItOGE0MC1hZDZlODcxOTc1MWYiLCJleHAiOjE3ODAyNDk0MjJ9.MQGKxYxBA6JdhTeCp2CbjXnnaEwn8M7iVyMMw7txX9s', 'Content-Type': 'application/json'} 
+ body=None 
+ </msg>
+<msg time="2026-05-31T20:28:36.798129" level="INFO">GET Response : url=http://localhost:5000/api/v1/test_suites/1 
+ status=200, reason=OK 
+ headers={'Server': 'Werkzeug/3.1.8 Python/3.12.13', 'Date': 'Sun, 31 May 2026 17:28:42 GMT', 'Content-Type': 'application/json', 'Content-Length': '119', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': 'true', 'Vary': 'Origin', 'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS', 'Connection': 'close'} 
+ body={
+  "test_suite": {
+    "cases": [],
+    "id": "1",
+    "length": "0",
+    "title": "API Test Suite RF rmpn22sr"
+  }
+}
+ 
+ </msg>
+<msg time="2026-05-31T20:28:36.798129" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>${url}</arg>
+<arg>headers=${headers}</arg>
+<arg>expected_status=any</arg>
+<doc>Sends a GET request.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.769182" elapsed="0.028947"/>
+</kw>
+<return>
+<value>${response}</value>
+<status status="PASS" start="2026-05-31T20:28:36.798129" elapsed="0.000000"/>
+</return>
+<msg time="2026-05-31T20:28:36.799133" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>${SUITES_URL}/${SUITE_ID}</arg>
+<arg>${AUTH_HEADERS}</arg>
+<status status="PASS" start="2026-05-31T20:28:36.766113" elapsed="0.033020"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-05-31T20:28:36.800146" level="INFO">${json} = {'test_suite': {'cases': [], 'id': '1', 'length': '0', 'title': 'API Test Suite RF rmpn22sr'}}</msg>
+<var>${json}</var>
+<arg>${response.json()}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.799640" elapsed="0.000506"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2026-05-31T20:28:36.802181" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${response.status_code}</arg>
+<arg>200</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.801167" elapsed="0.001014"/>
+</kw>
+<kw name="Dictionary Should Contain Key" owner="Collections">
+<arg>${json}</arg>
+<arg>test_suite</arg>
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.802181" elapsed="0.000000"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${json}[test_suite][id]</arg>
+<arg>${SUITE_ID}</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.802181" elapsed="0.001000"/>
+</kw>
+<kw name="Delete Suite After Test" type="TEARDOWN">
+<kw name="Delete Suite" owner="entities">
+<kw name="Delete Resource" owner="api">
+<kw name="DELETE" owner="RequestsLibrary">
+<msg time="2026-05-31T20:28:36.848917" level="INFO">DELETE Request : url=http://localhost:5000/api/v1/test_suites/1 
+ path_url=/api/v1/test_suites/1 
+ headers={'User-Agent': 'python-requests/2.33.1', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc4MDI0ODUyMiwianRpIjoiYTJhN2UwNGMtNWNhMC00Y2NjLTljODUtYTQ2YmM5ZTE2ZjI4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3ODAyNDg1MjIsImNzcmYiOiJiYjBlNGVhNS0zM2JmLTQxNjItOGE0MC1hZDZlODcxOTc1MWYiLCJleHAiOjE3ODAyNDk0MjJ9.MQGKxYxBA6JdhTeCp2CbjXnnaEwn8M7iVyMMw7txX9s', 'Content-Type': 'application/json', 'Content-Length': '0'} 
+ body=None 
+ </msg>
+<msg time="2026-05-31T20:28:36.848917" level="INFO">DELETE Response : url=http://localhost:5000/api/v1/test_suites/1 
+ status=200, reason=OK 
+ headers={'Server': 'Werkzeug/3.1.8 Python/3.12.13', 'Date': 'Sun, 31 May 2026 17:28:42 GMT', 'Content-Type': 'application/json', 'Content-Length': '51', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': 'true', 'Vary': 'Origin', 'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS', 'Connection': 'close'} 
+ body={
+  "message": "Test suite successfully deleted"
+}
+ 
+ </msg>
+<msg time="2026-05-31T20:28:36.848917" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>${url}</arg>
+<arg>headers=${headers}</arg>
+<arg>expected_status=any</arg>
+<doc>Sends a DELETE request.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.805183" elapsed="0.043734"/>
+</kw>
+<return>
+<value>${response}</value>
+<status status="PASS" start="2026-05-31T20:28:36.848917" elapsed="0.000000"/>
+</return>
+<arg>${SUITES_URL}/${suite_id}</arg>
+<arg>${headers}</arg>
+<status status="PASS" start="2026-05-31T20:28:36.805183" elapsed="0.046218"/>
+</kw>
+<arg>${AUTH_HEADERS}</arg>
+<arg>${SUITE_ID}</arg>
+<status status="PASS" start="2026-05-31T20:28:36.804201" elapsed="0.047200"/>
+</kw>
+<status status="PASS" start="2026-05-31T20:28:36.803181" elapsed="0.048220"/>
+</kw>
+<tag>TC10</tag>
+<tag>test_suites</tag>
+<status status="PASS" start="2026-05-31T20:28:36.733608" elapsed="0.117793"/>
+</test>
+<test id="s1-s1-s1-t4" name="TC11 GET Test Suite Non-Existent ID" line="42">
+<kw name="Get Resource" owner="api">
+<kw name="GET" owner="RequestsLibrary">
+<msg time="2026-05-31T20:28:36.868840" level="INFO">GET Request : url=http://localhost:5000/api/v1/test_suites/999999 
+ path_url=/api/v1/test_suites/999999 
+ headers={'User-Agent': 'python-requests/2.33.1', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc4MDI0ODUyMiwianRpIjoiYTJhN2UwNGMtNWNhMC00Y2NjLTljODUtYTQ2YmM5ZTE2ZjI4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3ODAyNDg1MjIsImNzcmYiOiJiYjBlNGVhNS0zM2JmLTQxNjItOGE0MC1hZDZlODcxOTc1MWYiLCJleHAiOjE3ODAyNDk0MjJ9.MQGKxYxBA6JdhTeCp2CbjXnnaEwn8M7iVyMMw7txX9s', 'Content-Type': 'application/json'} 
+ body=None 
+ </msg>
+<msg time="2026-05-31T20:28:36.870735" level="INFO">GET Response : url=http://localhost:5000/api/v1/test_suites/999999 
+ status=404, reason=NOT FOUND 
+ headers={'Server': 'Werkzeug/3.1.8 Python/3.12.13', 'Date': 'Sun, 31 May 2026 17:28:42 GMT', 'Content-Type': 'application/json', 'Content-Length': '44', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': 'true', 'Vary': 'Origin', 'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS', 'Connection': 'close'} 
+ body={
+  "message": "Test suite doesn't exist"
+}
+ 
+ </msg>
+<msg time="2026-05-31T20:28:36.870735" level="INFO">${response} = &lt;Response [404]&gt;</msg>
+<var>${response}</var>
+<arg>${url}</arg>
+<arg>headers=${headers}</arg>
+<arg>expected_status=any</arg>
+<doc>Sends a GET request.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.853321" elapsed="0.017414"/>
+</kw>
+<return>
+<value>${response}</value>
+<status status="PASS" start="2026-05-31T20:28:36.870735" elapsed="0.000000"/>
+</return>
+<msg time="2026-05-31T20:28:36.871756" level="INFO">${response} = &lt;Response [404]&gt;</msg>
+<var>${response}</var>
+<arg>${SUITES_URL}/999999</arg>
+<arg>${AUTH_HEADERS}</arg>
+<status status="PASS" start="2026-05-31T20:28:36.852797" elapsed="0.018959"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2026-05-31T20:28:36.871756" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${response.status_code}</arg>
+<arg>404</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.871756" elapsed="0.000000"/>
+</kw>
+<kw name="Should Contain" owner="BuiltIn">
+<arg>${response.json()}[message]</arg>
+<arg>doesn't exist</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.871756" elapsed="0.003749"/>
+</kw>
+<tag>negative</tag>
+<tag>TC11</tag>
+<tag>test_suites</tag>
+<status status="PASS" start="2026-05-31T20:28:36.852292" elapsed="0.023213"/>
+</test>
+<test id="s1-s1-s1-t5" name="TC12 PUT Update Test Suite" line="50">
+<kw name="Create Suite For Test" type="SETUP">
+<kw name="Generate Unique Title">
+<kw name="Generate Random String" owner="String">
+<msg time="2026-05-31T20:28:36.877698" level="INFO">${suffix} = 97ext0eu</msg>
+<var>${suffix}</var>
+<arg>8</arg>
+<arg>[LOWER][NUMBERS]</arg>
+<doc>Generates a string with a desired ``length`` from the given ``chars``.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.877698" elapsed="0.000000"/>
+</kw>
+<return>
+<value>${prefix} ${suffix}</value>
+<status status="PASS" start="2026-05-31T20:28:36.877698" elapsed="0.000000"/>
+</return>
+<msg time="2026-05-31T20:28:36.877698" level="INFO">${title} = API Test Suite RF 97ext0eu</msg>
+<var>${title}</var>
+<arg>API Test Suite RF</arg>
+<status status="PASS" start="2026-05-31T20:28:36.877149" elapsed="0.000549"/>
+</kw>
+<kw name="Create Suite" owner="entities">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-05-31T20:28:36.879209" level="INFO">${body} = {'title': 'API Test Suite RF 97ext0eu'}</msg>
+<var>${body}</var>
+<arg>title=${title}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.879209" elapsed="0.000000"/>
+</kw>
+<kw name="Post Resource" owner="api">
+<kw name="POST" owner="RequestsLibrary">
+<msg time="2026-05-31T20:28:36.900785" level="INFO">POST Request : url=http://localhost:5000/api/v1/test_suites 
+ path_url=/api/v1/test_suites 
+ headers={'User-Agent': 'python-requests/2.33.1', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc4MDI0ODUyMiwianRpIjoiYTJhN2UwNGMtNWNhMC00Y2NjLTljODUtYTQ2YmM5ZTE2ZjI4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3ODAyNDg1MjIsImNzcmYiOiJiYjBlNGVhNS0zM2JmLTQxNjItOGE0MC1hZDZlODcxOTc1MWYiLCJleHAiOjE3ODAyNDk0MjJ9.MQGKxYxBA6JdhTeCp2CbjXnnaEwn8M7iVyMMw7txX9s', 'Content-Type': 'application/json', 'Content-Length': '39'} 
+ body=b'{"title": "API Test Suite RF 97ext0eu"}' 
+ </msg>
+<msg time="2026-05-31T20:28:36.901423" level="INFO">POST Response : url=http://localhost:5000/api/v1/test_suites 
+ status=200, reason=OK 
+ headers={'Server': 'Werkzeug/3.1.8 Python/3.12.13', 'Date': 'Sun, 31 May 2026 17:28:42 GMT', 'Content-Type': 'application/json', 'Content-Length': '62', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': 'true', 'Vary': 'Origin', 'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS', 'Connection': 'close'} 
+ body={
+  "id": "1",
+  "message": "Test suite successfully added"
+}
+ 
+ </msg>
+<msg time="2026-05-31T20:28:36.901423" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>${url}</arg>
+<arg>json=${body}</arg>
+<arg>headers=${headers}</arg>
+<arg>expected_status=any</arg>
+<doc>Sends a POST request.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.879209" elapsed="0.023062"/>
+</kw>
+<return>
+<value>${response}</value>
+<status status="PASS" start="2026-05-31T20:28:36.902271" elapsed="0.000000"/>
+</return>
+<msg time="2026-05-31T20:28:36.902271" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>${SUITES_URL}</arg>
+<arg>${headers}</arg>
+<arg>${body}</arg>
+<status status="PASS" start="2026-05-31T20:28:36.879209" elapsed="0.023670"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2026-05-31T20:28:36.903887" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${response.status_code}</arg>
+<arg>200</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.902879" elapsed="0.001008"/>
+</kw>
+<return>
+<value>${response.json()}[id]</value>
+<status status="PASS" start="2026-05-31T20:28:36.903887" elapsed="0.000000"/>
+</return>
+<msg time="2026-05-31T20:28:36.903887" level="INFO">${id} = 1</msg>
+<var>${id}</var>
+<arg>${AUTH_HEADERS}</arg>
+<arg>${title}</arg>
+<status status="PASS" start="2026-05-31T20:28:36.879209" elapsed="0.024678"/>
+</kw>
+<kw name="Set Test Variable" owner="BuiltIn">
+<msg time="2026-05-31T20:28:36.906072" level="INFO">${SUITE_ID} = 1</msg>
+<arg>${SUITE_ID}</arg>
+<arg>${id}</arg>
+<doc>Makes a variable available everywhere within the scope of the current test.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.903887" elapsed="0.002185"/>
+</kw>
+<status status="PASS" start="2026-05-31T20:28:36.876361" elapsed="0.029711"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-05-31T20:28:36.907058" level="INFO">${body} = {'title': 'Updated Suite RF'}</msg>
+<var>${body}</var>
+<arg>title=Updated Suite RF</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.907058" elapsed="0.000000"/>
+</kw>
+<kw name="Put Resource" owner="api">
+<kw name="PUT" owner="RequestsLibrary">
+<msg time="2026-05-31T20:28:36.955513" level="INFO">PUT Request : url=http://localhost:5000/api/v1/test_suites/1 
+ path_url=/api/v1/test_suites/1 
+ headers={'User-Agent': 'python-requests/2.33.1', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc4MDI0ODUyMiwianRpIjoiYTJhN2UwNGMtNWNhMC00Y2NjLTljODUtYTQ2YmM5ZTE2ZjI4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3ODAyNDg1MjIsImNzcmYiOiJiYjBlNGVhNS0zM2JmLTQxNjItOGE0MC1hZDZlODcxOTc1MWYiLCJleHAiOjE3ODAyNDk0MjJ9.MQGKxYxBA6JdhTeCp2CbjXnnaEwn8M7iVyMMw7txX9s', 'Content-Type': 'application/json', 'Content-Length': '29'} 
+ body=b'{"title": "Updated Suite RF"}' 
+ </msg>
+<msg time="2026-05-31T20:28:36.955513" level="INFO">PUT Response : url=http://localhost:5000/api/v1/test_suites/1 
+ status=200, reason=OK 
+ headers={'Server': 'Werkzeug/3.1.8 Python/3.12.13', 'Date': 'Sun, 31 May 2026 17:28:42 GMT', 'Content-Type': 'application/json', 'Content-Length': '51', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': 'true', 'Vary': 'Origin', 'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS', 'Connection': 'close'} 
+ body={
+  "message": "Test suite successfully updated"
+}
+ 
+ </msg>
+<msg time="2026-05-31T20:28:36.955513" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>${url}</arg>
+<arg>json=${body}</arg>
+<arg>headers=${headers}</arg>
+<arg>expected_status=any</arg>
+<doc>Sends a PUT request.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.908268" elapsed="0.047245"/>
+</kw>
+<return>
+<value>${response}</value>
+<status status="PASS" start="2026-05-31T20:28:36.955513" elapsed="0.000000"/>
+</return>
+<msg time="2026-05-31T20:28:36.955513" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>${SUITES_URL}/${SUITE_ID}</arg>
+<arg>${AUTH_HEADERS}</arg>
+<arg>${body}</arg>
+<status status="PASS" start="2026-05-31T20:28:36.907058" elapsed="0.048455"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2026-05-31T20:28:36.955513" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${response.status_code}</arg>
+<arg>200</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.955513" elapsed="0.000000"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${response.json()}[message]</arg>
+<arg>Test suite successfully updated</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.955513" elapsed="0.003514"/>
+</kw>
+<kw name="Delete Suite After Test" type="TEARDOWN">
+<kw name="Delete Suite" owner="entities">
+<kw name="Delete Resource" owner="api">
+<kw name="DELETE" owner="RequestsLibrary">
+<msg time="2026-05-31T20:28:36.980047" level="INFO">DELETE Request : url=http://localhost:5000/api/v1/test_suites/1 
+ path_url=/api/v1/test_suites/1 
+ headers={'User-Agent': 'python-requests/2.33.1', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc4MDI0ODUyMiwianRpIjoiYTJhN2UwNGMtNWNhMC00Y2NjLTljODUtYTQ2YmM5ZTE2ZjI4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6InRlc3QiLCJuYmYiOjE3ODAyNDg1MjIsImNzcmYiOiJiYjBlNGVhNS0zM2JmLTQxNjItOGE0MC1hZDZlODcxOTc1MWYiLCJleHAiOjE3ODAyNDk0MjJ9.MQGKxYxBA6JdhTeCp2CbjXnnaEwn8M7iVyMMw7txX9s', 'Content-Type': 'application/json', 'Content-Length': '0'} 
+ body=None 
+ </msg>
+<msg time="2026-05-31T20:28:36.981056" level="INFO">DELETE Response : url=http://localhost:5000/api/v1/test_suites/1 
+ status=200, reason=OK 
+ headers={'Server': 'Werkzeug/3.1.8 Python/3.12.13', 'Date': 'Sun, 31 May 2026 17:28:42 GMT', 'Content-Type': 'application/json', 'Content-Length': '51', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': 'true', 'Vary': 'Origin', 'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS', 'Connection': 'close'} 
+ body={
+  "message": "Test suite successfully deleted"
+}
+ 
+ </msg>
+<msg time="2026-05-31T20:28:36.981056" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>${url}</arg>
+<arg>headers=${headers}</arg>
+<arg>expected_status=any</arg>
+<doc>Sends a DELETE request.</doc>
+<status status="PASS" start="2026-05-31T20:28:36.962144" elapsed="0.018912"/>
+</kw>
+<return>
+<value>${response}</value>
+<status status="PASS" start="2026-05-31T20:28:36.981618" elapsed="0.000000"/>
+</return>
+<arg>${SUITES_URL}/${suite_id}</arg>
+<arg>${headers}</arg>
+<status status="PASS" start="2026-05-31T20:28:36.961142" elapsed="0.020476"/>
+</kw>
+<arg>${AUTH_HEADERS}</arg>
+<arg>${SUITE_ID}</arg>
+<status status="PASS" start="2026-05-31T20:28:36.960055" elapsed="0.021563"/>
+</kw>
+<status status="PASS" start="2026-05-31T20:28:36.960055" elapsed="0.021563"/>
+</kw>
+<tag>TC12</tag>
+<tag>test_suites</tag>
+<status status="PASS" start="2026-05-31T20:28:36.875505" elapsed="0.106113"/>
+</test>
+<status status="PASS" start="2026-05-31T20:28:35.916842" elapsed="1.065857"/>
+</suite>
+<status status="PASS" start="2026-05-31T20:28:35.904304" elapsed="1.079393"/>
+</suite>
+<status status="PASS" start="2026-05-31T20:28:35.805872" elapsed="1.178477"/>
+</suite>
+<statistics>
+<total>
+<stat pass="5" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+<stat pass="1" fail="0" skip="0">negative</stat>
+<stat pass="1" fail="0" skip="0">TC06</stat>
+<stat pass="1" fail="0" skip="0">TC09</stat>
+<stat pass="1" fail="0" skip="0">TC10</stat>
+<stat pass="1" fail="0" skip="0">TC11</stat>
+<stat pass="1" fail="0" skip="0">TC12</stat>
+<stat pass="5" fail="0" skip="0">test_suites</stat>
+</tag>
+<suite>
+<stat name="Robot Tests" id="s1" pass="5" fail="0" skip="0">Robot Tests</stat>
+<stat name="Test Suites" id="s1-s1" pass="5" fail="0" skip="0">Robot Tests.Test Suites</stat>
+<stat name="Test Suites" id="s1-s1-s1" pass="5" fail="0" skip="0">Robot Tests.Test Suites.Test Suites</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

@@ -1,0 +1,16 @@
+--suite Robot Tests.Auth.Auth
+--variable CALLER_ID:2b6c117afd9e4435aca7a02eb3873306
+--variable PABOTLIBURI:127.0.0.1:8270
+--variable PABOTEXECUTIONPOOLID:0
+--variable PABOTISLASTEXECUTIONINPOOL:0
+--variable PABOTNUMBEROFPROCESSES:2
+--variable PABOTQUEUEINDEX:0
+--variable PABOTLASTLEVEL:Robot Tests.Auth
+--outputdir robot_tests/results\pabot_results\0
+--output output.xml
+--log NONE
+--report NONE
+--xunit NONE
+--consolecolors off
+--consolemarkers off
+robot_tests/
