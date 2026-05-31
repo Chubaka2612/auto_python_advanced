@@ -32,4 +32,5 @@ Put Resource
 
 Delete Resource
     [Arguments]    ${url}    ${headers}
-    DELETE    ${url}    headers=${headers}    expected_status=any
+    ${response}=    DELETE    ${url}    headers=${headers}    expected_status=any
+    RETURN    ${response}
