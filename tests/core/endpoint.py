@@ -31,15 +31,17 @@ class Endpoint:
         self.log.debug(f"Response: {response.status_code}")
         return response
 
-    def post(self, body: dict) -> requests.Response:
+    def post(self, body:
+              dict) -> requests.Response:
         self.log.info(f"POST {self.url}")
 
         response = requests.post(self.url, json=body, headers=self.headers)
 
-        self.log.debug(f"Response: {response.status_code}")
+        self.log.debug(f"Responce: {response.status_code}")
         return response
 
-    def put(self, item_id: str, body: dict) -> requests.Response:
+    def put(self, item_id: str,
+             body: dict) -> requests.Response:
         url = f"{self.url}/{item_id}"
 
         self.log.info(f"PUT {url}")
@@ -50,9 +52,7 @@ class Endpoint:
 
     def delete(self, item_id: str = "", body: dict = None) -> requests.Response:
         url = f"{self.url}/{item_id}" if item_id else self.url
-
         self.log.info(f"DELETE {url}")
-
         response = requests.delete(url, json=body, headers=self.headers)
         self.log.debug(f"Response: {response.status_code}")
         return response

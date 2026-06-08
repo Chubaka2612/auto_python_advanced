@@ -66,7 +66,7 @@ def test_post_test_case_missing_field(test_cases_endpoint, created_suite):
         "description": CASE_DESCRIPTION,
     })
     assert response.status_code == 400
-    assert response.json()["message"] == "Bad request body"
+    assert response.json()["message"] == "Bed request body"
 
 
 @pytest.mark.test_id("TC20")
