@@ -1,5 +1,4 @@
 import requests
-
 from utils.logger import get_logger
 
 
@@ -11,7 +10,7 @@ class Endpoint:
             "Authorization": f"Bearer {bearer_token}",
             "Content-Type": "application/json",
         }
-    
+
         self.log = get_logger(__name__)
 
     def __truediv__(self, path: str) -> "Endpoint":
@@ -31,17 +30,15 @@ class Endpoint:
         self.log.debug(f"Response: {response.status_code}")
         return response
 
-    def post(self, body:
-              dict) -> requests.Response:
+    def post(self, body: dict) -> requests.Response:
         self.log.info(f"POST {self.url}")
 
         response = requests.post(self.url, json=body, headers=self.headers)
 
-        self.log.debug(f"Responce: {response.status_code}")
+        self.log.debug(f"Response: {response.status_code}")
         return response
 
-    def put(self, item_id: str,
-             body: dict) -> requests.Response:
+    def put(self, item_id: str, body: dict) -> requests.Response:
         url = f"{self.url}/{item_id}"
 
         self.log.info(f"PUT {url}")

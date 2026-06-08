@@ -1,7 +1,6 @@
 # Auth tests
 import pytest
 import requests
-
 from utils.config import get_credentials
 
 
@@ -27,7 +26,8 @@ def test_post_login_invalid_password(login_url):
 @pytest.mark.test_id("TC04")
 def test_post_login_missing_required_fields(login_url):
     response = requests.post(
-        login_url,json={"username": "test"},
+        login_url,
+        json={"username": "test"},
     )
     assert response.status_code == 400
     assert response.json()["message"] == "Bad request body"
@@ -36,7 +36,8 @@ def test_post_login_missing_required_fields(login_url):
 @pytest.mark.test_id("TC05")
 def test_post_login_wrong_content_type(login_url):
     response = requests.post(
-        login_url, data="username=test&password=test",
+        login_url,
+        data="username=test&password=test",
         headers={"Content-Type": "text/plain"},
     )
     assert response.status_code == 415

@@ -1,9 +1,8 @@
 # Fixtures and hooks
 import pytest
 import requests
-
-from utils.config import get_credentials
 from core.endpoint import Endpoint
+from utils.config import get_credentials
 
 
 def pytest_addoption(parser):
@@ -42,9 +41,9 @@ def api_endpoint(hostname, bearer_token) -> Endpoint:
 
 @pytest.fixture(scope="session")
 def test_suites_endpoint(api_endpoint) -> Endpoint:
-    return api_endpoint/"test_suites"
+    return api_endpoint / "test_suites"
 
 
 @pytest.fixture(scope="session")
 def test_cases_endpoint(api_endpoint) -> Endpoint:
-    return api_endpoint/"test_cases"
+    return api_endpoint / "test_cases"
