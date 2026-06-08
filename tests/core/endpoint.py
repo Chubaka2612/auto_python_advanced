@@ -16,7 +16,7 @@ class Endpoint:
 
     def __truediv__(self, path: str) -> "Endpoint":
         new = object.__new__(Endpoint)
-        new.url = f"{self.url}/{path}"
+        new.url = f"{self.url.rstrip('/')}/{path.lstrip('/')}"
         new.headers = self.headers
         new.log = self.log
         return new

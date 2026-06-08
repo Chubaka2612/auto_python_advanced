@@ -16,23 +16,35 @@ def hostname(request) -> str:
 
 
 @pytest.fixture(scope="session")
-def bearer_token(hostname) -> str:
+def login_url(hostname) -> str:
+    return f"{hostname}/api/v1/login"
+
+
+@pytest.fixture(scope="session")
+def bearer_token(login_url) -> str:
     credentials = get_credentials()
 
     response = requests.post(
-        f"{hostname}/api/v1/login",
+        login_url,
         json=credentials,
     )
 
     assert response.status_code == 200, f"Login failed: {response.text}"
-    return response.json()["access_token"]
+    json = response.json()
+    assert "access_token" in json, f"access_token missing from login response: {json}"
+    return json["access_token"]
 
 
 @pytest.fixture(scope="session")
-def test_suites_endpoint(hostname, bearer_token) -> Endpoint:
-    return Endpoint(hostname, bearer_token) / "api/v1/test_suites"
+def api_endpoint(hostname, bearer_token) -> Endpoint:
+    return Endpoint(hostname, bearer_token) / "api/v1"
 
 
 @pytest.fixture(scope="session")
-def test_cases_endpoint(hostname, bearer_token) -> Endpoint:
-    return Endpoint(hostname, bearer_token) / "api/v1/test_cases"
+def test_suites_endpoint(api_endpoint) -> Endpoint:
+    return api_endpoint / "test_suites"
+
+
+@pytest.fixture(scope="session")
+def test_cases_endpoint(api_endpoint) -> Endpoint:
+    return api_endpoint / "test_cases"

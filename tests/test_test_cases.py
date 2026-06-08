@@ -41,9 +41,11 @@ def test_post_test_case_create(test_cases_endpoint, created_suite):
     })
     assert response.status_code == 200
     body = response.json()
-    assert "id" in body
-    assert body["message"] == "Test case successfully added"
-    test_cases_endpoint.delete(body["id"])
+    try:
+        assert "id" in body
+        assert body["message"] == "Test case successfully added"
+    finally:
+        test_cases_endpoint.delete(body.get("id", ""))
 
 
 @pytest.mark.test_id("TC17")
@@ -110,15 +112,7 @@ def test_put_test_case_update(test_cases_endpoint, created_case, created_suite):
 
 
 @pytest.mark.test_id("TC26")
-def test_delete_test_case_by_id(test_cases_endpoint, created_suite):
-    response = test_cases_endpoint.post({
-        "suiteID": created_suite,
-        "title": "Case To Delete",
-        "description": "Will be deleted in this test",
-    })
-    assert response.status_code == 200
-    case_id = response.json()["id"]
-
-    delete_response = test_cases_endpoint.delete(case_id)
+def test_delete_test_case_by_id(test_cases_endpoint, created_case):
+    delete_response = test_cases_endpoint.delete(created_case)
     assert delete_response.status_code == 200
     assert delete_response.json()["message"] == "Test case successfully deleted"
