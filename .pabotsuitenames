@@ -1,0 +1,7 @@
+datasources:d3d81e7254d852d5dd85e902ed288e654f2240e3
+commandlineoptions:97d170e1550eee4afc0af065b78cda302a97674c
+suitesfrom:no-suites-from-option
+file:ce8e940c90d1b049daa63a5ac29b499e33041776
+--suite Robot Tests.Auth.Auth
+--suite Robot Tests.Test Cases.Test Cases
+--suite Robot Tests.Test Suites.Test Suites
