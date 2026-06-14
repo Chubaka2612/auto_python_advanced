@@ -5,7 +5,6 @@ on:
     branches:
       - master
       - develop
-      - hw6
   workflow_dispatch:
     inputs:
       run_lint:
@@ -16,6 +15,7 @@ on:
         description: 'Run infra tests (testinfra)'
         type: boolean
         default: true
+
 
 jobs:
   lint:
@@ -58,19 +58,7 @@ jobs:
         run: docker compose up --build -d
 
       - name: Wait for API to be ready
-        run: |
-          echo "Waiting for API on port 5000..."
-          for i in $(seq 1 30); do
-            if curl -sf http://localhost:5000/apidocs/ > /dev/null 2>&1; then
-              echo "API is ready after $i attempts"
-              exit 0
-            fi
-            echo "Attempt $i/30 — retrying in 2s..."
-            sleep 2
-          done
-          echo "API did not become ready in time, dumping logs:"
-          docker compose logs
-          exit 1
+        run: bash .github/scripts/wait-for-api.sh
 
       - uses: actions/setup-python@v5
         with:
