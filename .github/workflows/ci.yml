@@ -1,0 +1,105 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+      - hw6
+  workflow_dispatch:
+    inputs:
+      run_lint:
+        description: 'Run linters (isort, black, flake8, codespell)'
+        type: boolean
+        default: true
+      run_infra:
+        description: 'Run infra tests (testinfra)'
+        type: boolean
+        default: true
+
+jobs:
+  lint:
+    name: Code Quality
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || inputs.run_lint != false
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install linters
+        run: pip install isort black flake8 codespell
+
+      - name: isort
+        run: isort --check-only --settings-file ./.isort.cfg tests/
+
+      - name: black
+        run: black --check tests/
+
+      - name: flake8
+        run: flake8 --config .flake8 tests/
+
+      - name: codespell
+        run: codespell tests/
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    needs: lint
+    if: always() && (needs.lint.result == 'success' || needs.lint.result == 'skipped')
+    env:
+      COMPOSE_PROJECT_NAME: adpyauto
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build and start services
+        run: docker compose up --build -d
+
+      - name: Wait for API to be ready
+        run: |
+          echo "Waiting for API on port 5000..."
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:5000/apidocs/ > /dev/null 2>&1; then
+              echo "API is ready after $i attempts"
+              exit 0
+            fi
+            echo "Attempt $i/30 — retrying in 2s..."
+            sleep 2
+          done
+          echo "API did not become ready in time, dumping logs:"
+          docker compose logs
+          exit 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Create reports directory
+        run: mkdir -p reports
+
+      - name: Infra tests
+        if: github.event_name == 'push' || inputs.run_infra != false
+        run: pytest tests/infra/ -v --junitxml=reports/infra-junit.xml
+
+      - name: API tests
+        run: |
+          pytest tests/ --ignore=tests/infra -v \
+            --junitxml=reports/junit.xml \
+            --html=reports/report.html \
+            --self-contained-html
+
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: reports/
+
+      - name: Stop services
+        if: always()
+        run: docker compose down
