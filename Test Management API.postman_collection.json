@@ -1,0 +1,1894 @@
+{
+  "info": {
+    "_postman_id": "eac8ad8e-4998-40a3-abf6-4852d28c7fec",
+    "name": "Test Management API",
+    "description": "Postman test collection for Test Management System API.\n\nCredentials: username=test, password=test  \nBase URL: [http://127.0.0.1:5000/api/v1](http://127.0.0.1:5000/api/v1)\n\nRun sequentially in Collection Runner for best results. Pre-request scripts auto-configure required state for edge-case tests.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "1605671"
+  },
+  "item": [
+    {
+      "name": "init",
+      "item": [
+        {
+          "name": "TC01: GET Init Message - Positive",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has message property\", function () {",
+                  "    pm.expect(pm.response.json()).to.have.property('message');",
+                  "});",
+                  "",
+                  "pm.test(\"Message contains expected API name\", function () {",
+                  "    pm.expect(pm.response.json().message).to.include('Test Management System API');",
+                  "});",
+                  "",
+                  "pm.test(\"Content-Type header is application/json\", function () {",
+                  "    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+                  "});",
+                  "",
+                  "pm.test(\"Response time is under 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "pm.test(\"Response schema is valid\", function () {",
+                  "    pm.response.to.have.jsonSchema({",
+                  "        type: 'object',",
+                  "        required: ['message'],",
+                  "        properties: { message: { type: 'string' } }",
+                  "    });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                ""
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "login",
+      "item": [
+        {
+          "name": "TC02: POST Login - Valid Credentials - Positive",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has access_token\", function () {",
+                  "    pm.expect(pm.response.json()).to.have.property('access_token');",
+                  "});",
+                  "",
+                  "pm.test(\"access_token is a non-empty string\", function () {",
+                  "    const token = pm.response.json().access_token;",
+                  "    pm.expect(token).to.be.a('string').and.not.empty;",
+                  "});",
+                  "",
+                  "pm.test(\"Content-Type header is application/json\", function () {",
+                  "    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+                  "});",
+                  "",
+                  "pm.test(\"Response schema is valid\", function () {",
+                  "    pm.response.to.have.jsonSchema({",
+                  "        type: 'object',",
+                  "        required: ['access_token'],",
+                  "        properties: { access_token: { type: 'string' } }",
+                  "    });",
+                  "});",
+                  "",
+                  "if (pm.response.code === 200) {",
+                  "    pm.collectionVariables.set('authToken', pm.response.json().access_token);",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"test\",\r\n    \"password\": \"test\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC03: POST Login - Invalid Password - Negative",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 401\", function () {",
+                  "    pm.response.to.have.status(401);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has message property\", function () {",
+                  "    pm.expect(pm.response.json()).to.have.property('message');",
+                  "});",
+                  "",
+                  "pm.test(\"Error message indicates wrong credentials\", function () {",
+                  "    pm.expect(pm.response.json().message).to.equal('No such username or password');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"test\",\r\n    \"password\": \"wrongpassword\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC04: POST Login - Missing Required Fields - Negative",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 400\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has message property\", function () {",
+                  "    pm.expect(pm.response.json()).to.have.property('message');",
+                  "});",
+                  "",
+                  "pm.test(\"Error message indicates bad request\", function () {",
+                  "    pm.expect(pm.response.json().message).to.equal('Bad request body');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\": \"test\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC05: POST Login - Wrong Content-Type - Negative",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 415\", function () {",
+                  "    pm.response.to.have.status(415);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has message property\", function () {",
+                  "    pm.expect(pm.response.json()).to.have.property('message');",
+                  "});",
+                  "",
+                  "pm.test(\"Error message indicates wrong content type\", function () {",
+                  "    pm.expect(pm.response.json().message).to.equal('Content-type must be application/json');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/plain"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "username=test&password=test"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "test-suite",
+      "item": [
+        {
+          "name": "TC06: POST Test Suite - Create - Positive",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has message property\", function () {",
+                  "    pm.expect(pm.response.json()).to.have.property('message');",
+                  "});",
+                  "",
+                  "pm.test(\"Success message is correct\", function () {",
+                  "    pm.expect(pm.response.json().message).to.equal('Test suite successfully added');",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains generated id\", function () {",
+                  "    pm.expect(pm.response.json()).to.have.property('id');",
+                  "});",
+                  "",
+                  "pm.test(\"Content-Type header is application/json\", function () {",
+                  "    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+                  "});",
+                  "",
+                  "pm.test(\"Response schema is valid\", function () {",
+                  "    pm.response.to.have.jsonSchema({",
+                  "        type: 'object',",
+                  "        required: ['message', 'id'],",
+                  "        properties: {",
+                  "            message: { type: 'string' },",
+                  "            id: { type: 'string' }",
+                  "        }",
+                  "    });",
+                  "});",
+                  "",
+                  "if (pm.response.code === 200) {",
+                  "    pm.collectionVariables.set('suiteId', pm.response.json().id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\": \"API Test Suite\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/test_suites",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "test_suites"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC07: POST Test Suite - Duplicate - Negative",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Set up ID-collision state: create suite2, then delete suite1",
+                  "// After setup: hash_len=1, only suite2 exists.",
+                  "// Main request will compute ID = hash_len+1 = 2, which already exists → 409",
+                  "const baseUrl = pm.collectionVariables.get('baseUrl');",
+                  "const token   = pm.collectionVariables.get('authToken');",
+                  "const suite1  = pm.collectionVariables.get('suiteId');",
+                  "",
+                  "pm.sendRequest({",
+                  "    url: baseUrl + '/test_suites',",
+                  "    method: 'POST',",
+                  "    header: [",
+                  "        { key: 'Content-Type', value: 'application/json' },",
+                  "        { key: 'Authorization', value: 'Bearer ' + token }",
+                  "    ],",
+                  "    body: { mode: 'raw', raw: JSON.stringify({ title: 'Conflict Suite' }) }",
+                  "}, function(err, res) {",
+                  "    if (!err && res.code === 200) {",
+                  "        pm.sendRequest({",
+                  "            url: baseUrl + '/test_suites/' + suite1,",
+                  "            method: 'DELETE',",
+                  "            header: [{ key: 'Authorization', value: 'Bearer ' + token }]",
+                  "        }, function() {});",
+                  "    }",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 409\", function () {",
+                  "    pm.response.to.have.status(409);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has message property\", function () {",
+                  "    pm.expect(pm.response.json()).to.have.property('message');",
+                  "});",
+                  "",
+                  "pm.test(\"Error message indicates duplicate\", function () {",
+                  "    pm.expect(pm.response.json().message).to.include('already exist');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\": \"Any New Suite\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/test_suites",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "test_suites"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC08: POST Test Suite - Missing Title Field - Negative",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Restore clean state: delete all suites (force) then recreate the main suite",
+                  "const baseUrl = pm.collectionVariables.get('baseUrl');",
+                  "const token   = pm.collectionVariables.get('authToken');",
+                  "",
+                  "pm.sendRequest({",
+                  "    url: baseUrl + '/test_suites',",
+                  "    method: 'DELETE',",
+                  "    header: [",
+                  "        { key: 'Content-Type', value: 'application/json' },",
+                  "        { key: 'Authorization', value: 'Bearer ' + token }",
+                  "    ],",
+                  "    body: { mode: 'raw', raw: JSON.stringify({ force: true }) }",
+                  "}, function(err, res) {",
+                  "    pm.sendRequest({",
+                  "        url: baseUrl + '/test_suites',",
+                  "        method: 'POST',",
+                  "        header: [",
+                  "            { key: 'Content-Type', value: 'application/json' },",
+                  "            { key: 'Authorization', value: 'Bearer ' + token }",
+                  "        ],",
+                  "        body: { mode: 'raw', raw: JSON.stringify({ title: 'API Test Suite' }) }",
+                  "    }, function(err2, res2) {",
+                  "        if (!err2 && res2.code === 200) {",
+                  "            pm.collectionVariables.set('suiteId', res2.json().id);",
+                  "        }",
+                  "    });",
+                  "});"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 400\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has message property\", function () {",
+                  "    pm.expect(pm.response.json()).to.have.property('message');",
+                  "});",
+                  "",
+                  "pm.test(\"Error message indicates bad request body\", function () {",
+                  "    pm.expect(pm.response.json().message).to.equal('Bad request body');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/test_suites",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "test_suites"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC09: GET All Test Suites - Positive",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has test_suites array\", function () {",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('test_suites');",
+                  "    pm.expect(json.test_suites).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test(\"At least one test suite exists\", function () {",
+                  "    pm.expect(pm.response.json().test_suites.length).to.be.at.least(1);",
+                  "});",
+                  "",
+                  "pm.test(\"Content-Type header is application/json\", function () {",
+                  "    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+                  "});",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/test_suites",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "test_suites"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC10: GET Test Suite by ID - Positive",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has test_suite object\", function () {",
+                  "    pm.expect(pm.response.json()).to.have.property('test_suite');",
+                  "});",
+                  "",
+                  "pm.test(\"Test suite has required fields\", function () {",
+                  "    const suite = pm.response.json().test_suite;",
+                  "    pm.expect(suite).to.include.keys('id', 'title', 'length', 'cases');",
+                  "});",
+                  "",
+                  "pm.test(\"Test suite id matches requested id\", function () {",
+                  "    pm.expect(pm.response.json().test_suite.id).to.equal(pm.collectionVariables.get('suiteId'));",
+                  "});",
+                  "",
+                  "pm.test(\"cases field is an array\", function () {",
+                  "    pm.expect(pm.response.json().test_suite.cases).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test(\"Response schema is valid\", function () {",
+                  "    pm.response.to.have.jsonSchema({",
+                  "        type: 'object',",
+                  "        required: ['test_suite'],",
+                  "        properties: {",
+                  "            test_suite: {",
+                  "                type: 'object',",
+                  "                required: ['id', 'title', 'length', 'cases'],",
+                  "                properties: {",
+                  "                    id:     { type: 'string' },",
+                  "                    title:  { type: 'string' },",
+                  "                    length: { type: 'string' },",
+                  "                    cases:  { type: 'array' }",
+                  "                }",
+                  "            }",
+                  "        }",
+                  "    });",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/test_suites/{{suiteId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "test_suites",
+                "{{suiteId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC11: GET Test Suite by Non-Existent ID - Negative",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has message property\", function () {",
+                  "    pm.expect(pm.response.json()).to.have.property('message');",
+                  "});",
+                  "",
+                  "pm.test(\"Error message indicates suite not found\", function () {",
+                  "    pm.expect(pm.response.json().message).to.include(\"doesn't exist\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/test_suites/999999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "test_suites",
+                "999999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC12: PUT Update Test Suite - Positive",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has message property\", function () {",
+                  "    pm.expect(pm.response.json()).to.have.property('message');",
+                  "});",
+                  "",
+                  "pm.test(\"Success message confirms update\", function () {",
+                  "    pm.expect(pm.response.json().message).to.equal('Test suite successfully updated');",
+                  "});",
+                  "",
+                  "pm.test(\"Content-Type header is application/json\", function () {",
+                  "    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\": \"Updated API Test Suite\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/test_suites/{{suiteId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "test_suites",
+                "{{suiteId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC13: PUT Update Non-Existent Test Suite - Negative",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"[SPEC] Expected 404 - server should return 404 for non-existent suite\", function () {",
+                  "    // BUG: Expected per API spec: 404 'Test suite doesn't exist'",
+                  "    pm.expect(pm.response.code).to.be.equal(404);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\": \"Non-Existent Suite Update\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/test_suites/999999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "test_suites",
+                "999999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC14: DELETE Test Suite by ID - Positive",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Create a temporary suite to be deleted by this request",
+                  "const baseUrl     = pm.collectionVariables.get('baseUrl');",
+                  "const token       = pm.collectionVariables.get('authToken');",
+                  "const uniqueTitle = 'Temp Suite For Delete ' + Date.now();",
+                  "",
+                  "pm.sendRequest({",
+                  "    url: baseUrl + '/test_suites',",
+                  "    method: 'POST',",
+                  "    header: [",
+                  "        { key: 'Content-Type', value: 'application/json' },",
+                  "        { key: 'Authorization', value: 'Bearer ' + token }",
+                  "    ],",
+                  "    body: { mode: 'raw', raw: JSON.stringify({ title: uniqueTitle }) }",
+                  "}, function(err, res) {",
+                  "    if (!err && res.code === 200) {",
+                  "        pm.collectionVariables.set('tempSuiteId', res.json().id);",
+                  "    }",
+                  "});"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has message property\", function () {",
+                  "    pm.expect(pm.response.json()).to.have.property('message');",
+                  "});",
+                  "",
+                  "pm.test(\"Success message confirms deletion\", function () {",
+                  "    pm.expect(pm.response.json().message).to.equal('Test suite successfully deleted');",
+                  "});",
+                  "",
+                  "pm.test(\"Response schema is valid\", function () {",
+                  "    pm.response.to.have.jsonSchema({",
+                  "        type: 'object',",
+                  "        required: ['message'],",
+                  "        properties: { message: { type: 'string' } }",
+                  "    });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/test_suites/{{tempSuiteId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "test_suites",
+                "{{tempSuiteId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC15: DELETE Non-Existent Test Suite - Negative",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "",
+                  "pm.test(\"[SPEC] Expected 404 - server should return 404 for non-existent suite\", function () {",
+                  "    // BUG: Expected per API spec: 404 'Test suite doesn't exist'",
+                  "    pm.expect(pm.response.code).to.be.equal(404);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/test_suites/999999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "test_suites",
+                "999999"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "test-case",
+      "item": [
+        {
+          "name": "TC16: POST Test Case - Create - Positive",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has message property\", function () {",
+                  "    pm.expect(pm.response.json()).to.have.property('message');",
+                  "});",
+                  "",
+                  "pm.test(\"Success message confirms test case added\", function () {",
+                  "    pm.expect(pm.response.json().message).to.equal('Test case successfully added');",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains generated id\", function () {",
+                  "    pm.expect(pm.response.json()).to.have.property('id');",
+                  "});",
+                  "",
+                  "pm.test(\"Content-Type header is application/json\", function () {",
+                  "    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+                  "});",
+                  "",
+                  "pm.test(\"Response schema is valid\", function () {",
+                  "    pm.response.to.have.jsonSchema({",
+                  "        type: 'object',",
+                  "        required: ['message', 'id'],",
+                  "        properties: {",
+                  "            message: { type: 'string' },",
+                  "            id:      { type: 'string' }",
+                  "        }",
+                  "    });",
+                  "});",
+                  "",
+                  "if (pm.response.code === 200) {",
+                  "    pm.collectionVariables.set('testCaseId', pm.response.json().id);",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"suiteID\": \"{{suiteId}}\",\r\n    \"title\": \"Login Functionality Test\",\r\n    \"description\": \"Tests the POST /login endpoint\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/test_cases",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "test_cases"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC17: POST Test Case - Non-Existent Suite ID - Negative",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has message property\", function () {",
+                  "    pm.expect(pm.response.json()).to.have.property('message');",
+                  "});",
+                  "",
+                  "pm.test(\"Error message indicates suite not found\", function () {",
+                  "    pm.expect(pm.response.json().message).to.equal(\"Test suite doesn't exist\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"suiteID\": \"999999\", \"title\": \"Orphan Test Case\", \"description\": \"References non-existent suite\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/test_cases",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "test_cases"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC18: POST Test Case - Duplicate - Negative",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Create ID-collision state: create case2 then delete case1",
+                  "const baseUrl    = pm.collectionVariables.get('baseUrl');",
+                  "const token      = pm.collectionVariables.get('authToken');",
+                  "const suiteId    = pm.collectionVariables.get('suiteId');",
+                  "const testCaseId = pm.collectionVariables.get('testCaseId');",
+                  "",
+                  "pm.sendRequest({",
+                  "    url: baseUrl + '/test_cases',",
+                  "    method: 'POST',",
+                  "    header: [",
+                  "        { key: 'Content-Type', value: 'application/json' },",
+                  "        { key: 'Authorization', value: 'Bearer ' + token }",
+                  "    ],",
+                  "    body: { mode: 'raw', raw: JSON.stringify({",
+                  "        suiteID: suiteId,",
+                  "        title: 'Conflict Case',",
+                  "        description: 'For conflict state setup'",
+                  "    })}",
+                  "}, function(err, res) {",
+                  "    if (!err && res.code === 200) {",
+                  "        pm.sendRequest({",
+                  "            url: baseUrl + '/test_cases/' + testCaseId,",
+                  "            method: 'DELETE',",
+                  "            header: [{ key: 'Authorization', value: 'Bearer ' + token }]",
+                  "        }, function() {});",
+                  "    }",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 409\", function () {",
+                  "    pm.response.to.have.status(409);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has message property\", function () {",
+                  "    pm.expect(pm.response.json()).to.have.property('message');",
+                  "});",
+                  "",
+                  "pm.test(\"Error message indicates duplicate\", function () {",
+                  "    pm.expect(pm.response.json().message).to.include('already exist');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"suiteID\": \"{{suiteId}}\",\r\n    \"title\": \"Any Conflict Case\",\r\n    \"description\": \"Should fail with 409\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/test_cases",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "test_cases"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC19: POST Test Case - Missing Required Field - Negative",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Restore clean state: delete all test cases then recreate the main test case",
+                  "const baseUrl = pm.collectionVariables.get('baseUrl');",
+                  "const token   = pm.collectionVariables.get('authToken');",
+                  "const suiteId = pm.collectionVariables.get('suiteId');",
+                  "",
+                  "pm.sendRequest({",
+                  "    url: baseUrl + '/test_cases',",
+                  "    method: 'DELETE',",
+                  "    header: [{ key: 'Authorization', value: 'Bearer ' + token }]",
+                  "}, function(err, res) {",
+                  "    pm.sendRequest({",
+                  "        url: baseUrl + '/test_cases',",
+                  "        method: 'POST',",
+                  "        header: [",
+                  "            { key: 'Content-Type', value: 'application/json' },",
+                  "            { key: 'Authorization', value: 'Bearer ' + token }",
+                  "        ],",
+                  "        body: { mode: 'raw', raw: JSON.stringify({",
+                  "            suiteID: suiteId,",
+                  "            title: 'Login Functionality Test',",
+                  "            description: 'Tests the POST /login endpoint'",
+                  "        })}",
+                  "    }, function(err2, res2) {",
+                  "        if (!err2 && res2.code === 200) {",
+                  "            pm.collectionVariables.set('testCaseId', res2.json().id);",
+                  "        }",
+                  "    });",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 400\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has message property\", function () {",
+                  "    pm.expect(pm.response.json()).to.have.property('message');",
+                  "});",
+                  "",
+                  "pm.test(\"Error message indicates bad request body\", function () {",
+                  "    pm.expect(pm.response.json().message).to.equal('Bad request body');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"suiteID\": \"{{suiteId}}\",\r\n    \"description\": \"Missing required title field\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/test_cases",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "test_cases"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC20: GET All Test Cases - Positive",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has test_cases array\", function () {",
+                  "    const json = pm.response.json();",
+                  "    pm.expect(json).to.have.property('test_cases');",
+                  "    pm.expect(json.test_cases).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test(\"At least one test case exists\", function () {",
+                  "    pm.expect(pm.response.json().test_cases.length).to.be.at.least(1);",
+                  "});",
+                  "",
+                  "pm.test(\"Response schema is valid\", function () {",
+                  "    pm.response.to.have.jsonSchema({",
+                  "        type: 'object',",
+                  "        required: ['test_cases'],",
+                  "        properties: {",
+                  "            test_cases: {",
+                  "                type: 'array',",
+                  "                items: {",
+                  "                    type: 'object',",
+                  "                    required: ['id', 'suiteID', 'title', 'description'],",
+                  "                    properties: {",
+                  "                        id:          { type: 'string' },",
+                  "                        suiteID:     { type: 'string' },",
+                  "                        title:       { type: 'string' },",
+                  "                        description: { type: 'string' }",
+                  "                    }",
+                  "                }",
+                  "            }",
+                  "        }",
+                  "    });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/test_cases",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "test_cases"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC21: GET Test Case by ID - Positive",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has test_case object\", function () {",
+                  "    pm.expect(pm.response.json()).to.have.property('test_case');",
+                  "});",
+                  "",
+                  "pm.test(\"Test case has required fields\", function () {",
+                  "    const tc = pm.response.json().test_case;",
+                  "    pm.expect(tc).to.include.keys('id', 'suiteID', 'title', 'description');",
+                  "});",
+                  "",
+                  "pm.test(\"Test case id matches requested id\", function () {",
+                  "    pm.expect(pm.response.json().test_case.id).to.equal(pm.collectionVariables.get('testCaseId'));",
+                  "});",
+                  "",
+                  "pm.test(\"suiteID matches parent suite\", function () {",
+                  "    pm.expect(pm.response.json().test_case.suiteID).to.equal(pm.collectionVariables.get('suiteId'));",
+                  "});",
+                  "",
+                  "pm.test(\"Response schema is valid\", function () {",
+                  "    pm.response.to.have.jsonSchema({",
+                  "        type: 'object',",
+                  "        required: ['test_case'],",
+                  "        properties: {",
+                  "            test_case: {",
+                  "                type: 'object',",
+                  "                required: ['id', 'suiteID', 'title', 'description'],",
+                  "                properties: {",
+                  "                    id:          { type: 'string' },",
+                  "                    suiteID:     { type: 'string' },",
+                  "                    title:       { type: 'string' },",
+                  "                    description: { type: 'string' }",
+                  "                }",
+                  "            }",
+                  "        }",
+                  "    });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/test_cases/{{testCaseId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "test_cases",
+                "{{testCaseId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC22: GET Test Case by Non-Existent ID - Negative",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has message property\", function () {",
+                  "    pm.expect(pm.response.json()).to.have.property('message');",
+                  "});",
+                  "",
+                  "pm.test(\"Error message indicates test case not found\", function () {",
+                  "    pm.expect(pm.response.json().message).to.include(\"doesn't exist\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/test_cases/999999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "test_cases",
+                "999999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC23: PUT Update Test Case - Positive",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has message property\", function () {",
+                  "    pm.expect(pm.response.json()).to.have.property('message');",
+                  "});",
+                  "",
+                  "pm.test(\"Success message confirms update\", function () {",
+                  "    pm.expect(pm.response.json().message).to.equal('Test case successfully updated');",
+                  "});",
+                  "",
+                  "pm.test(\"Content-Type header is application/json\", function () {",
+                  "    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"suiteID\": \"{{suiteId}}\",\r\n    \"title\": \"Updated Login Functionality Test\",\r\n    \"description\": \"Updated description for login test\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/test_cases/{{testCaseId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "test_cases",
+                "{{testCaseId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC24: PUT Update Non-Existent Test Case - Negative",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has message property\", function () {",
+                  "    pm.expect(pm.response.json()).to.have.property('message');",
+                  "});",
+                  "",
+                  "pm.test(\"Error message indicates test case not found\", function () {",
+                  "    pm.expect(pm.response.json().message).to.include(\"doesn't exist\");",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"suiteID\": \"{{suiteId}}\",\r\n    \"title\": \"Ghost Case\",\r\n    \"description\": \"Should return 404\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/test_cases/999999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "test_cases",
+                "999999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC25: DELETE Test Suite with Linked Cases and force: false - Negative",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 409\", function () {",
+                  "    pm.response.to.have.status(409);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has message property\", function () {",
+                  "    pm.expect(pm.response.json()).to.have.property('message');",
+                  "});",
+                  "",
+                  "pm.test(\"Error message explains why delete failed\", function () {",
+                  "    pm.expect(pm.response.json().message).to.include('Unable to delete');",
+                  "});",
+                  "",
+                  "pm.test(\"Suite was NOT deleted (still retrievable)\", function (done) {",
+                  "    const baseUrl = pm.collectionVariables.get('baseUrl');",
+                  "    const token   = pm.collectionVariables.get('authToken');",
+                  "    const suiteId = pm.collectionVariables.get('suiteId');",
+                  "    pm.sendRequest({",
+                  "        url: baseUrl + '/test_suites/' + suiteId,",
+                  "        method: 'GET',",
+                  "        header: [{ key: 'Authorization', value: 'Bearer ' + token }]",
+                  "    }, function(err, res) {",
+                  "        pm.expect(res.code).to.equal(200);",
+                  "        done();",
+                  "    });",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"force\": false}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/test_suites/{{suiteId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "test_suites",
+                "{{suiteId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC26: DELETE Test Case by ID - Positive",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has message property\", function () {",
+                  "    pm.expect(pm.response.json()).to.have.property('message');",
+                  "});",
+                  "",
+                  "pm.test(\"Success message confirms deletion\", function () {",
+                  "    pm.expect(pm.response.json().message).to.equal('Test case successfully deleted');",
+                  "});",
+                  "",
+                  "pm.test(\"Deleted test case is no longer retrievable\", function (done) {",
+                  "    const baseUrl    = pm.collectionVariables.get('baseUrl');",
+                  "    const token      = pm.collectionVariables.get('authToken');",
+                  "    const testCaseId = pm.collectionVariables.get('testCaseId');",
+                  "    pm.sendRequest({",
+                  "        url: baseUrl + '/test_cases/' + testCaseId,",
+                  "        method: 'GET',",
+                  "        header: [{ key: 'Authorization', value: 'Bearer ' + token }]",
+                  "    }, function(err, res) {",
+                  "        pm.expect(res.code).to.equal(404);",
+                  "        done();",
+                  "    });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/test_cases/{{testCaseId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "test_cases",
+                "{{testCaseId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC27: DELETE Non-Existent Test Case - Negative",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has message property\", function () {",
+                  "    pm.expect(pm.response.json()).to.have.property('message');",
+                  "});",
+                  "",
+                  "pm.test(\"Error message indicates test case not found\", function () {",
+                  "    pm.expect(pm.response.json().message).to.include(\"doesn't exist\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/test_cases/999999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "test_cases",
+                "999999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC28: DELETE All Test Cases - Positive",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has message property\", function () {",
+                  "    pm.expect(pm.response.json()).to.have.property('message');",
+                  "});",
+                  "",
+                  "pm.test(\"Success message confirms all test cases deleted\", function () {",
+                  "    pm.expect(pm.response.json().message).to.equal('All test cases successfully deleted');",
+                  "});",
+                  "",
+                  "pm.test(\"GET all test cases returns empty array after deletion\", function (done) {",
+                  "    const baseUrl = pm.collectionVariables.get('baseUrl');",
+                  "    const token   = pm.collectionVariables.get('authToken');",
+                  "    pm.sendRequest({",
+                  "        url: baseUrl + '/test_cases',",
+                  "        method: 'GET',",
+                  "        header: [{ key: 'Authorization', value: 'Bearer ' + token }]",
+                  "    }, function(err, res) {",
+                  "        pm.expect(res.code).to.equal(200);",
+                  "        pm.expect(res.json().test_cases).to.be.an('array').with.length(0);",
+                  "        done();",
+                  "    });",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/test_cases",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "test_cases"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC29: DELETE Test Suite by ID (Now Empty) - Positive",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has message property\", function () {",
+                  "    pm.expect(pm.response.json()).to.have.property('message');",
+                  "});",
+                  "",
+                  "pm.test(\"Success message confirms deletion\", function () {",
+                  "    pm.expect(pm.response.json().message).to.equal('Test suite successfully deleted');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/test_suites/{{suiteId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "test_suites",
+                "{{suiteId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC30: DELETE All Test Suites with force:true - Positive",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has message property\", function () {",
+                  "    pm.expect(pm.response.json()).to.have.property('message');",
+                  "});",
+                  "",
+                  "pm.test(\"Success message confirms cleanup\", function () {",
+                  "    pm.expect(pm.response.json().message).to.be.a('string');",
+                  "});",
+                  "",
+                  "pm.test(\"All test suites removed after force delete\", function (done) {",
+                  "    const baseUrl = pm.collectionVariables.get('baseUrl');",
+                  "    const token   = pm.collectionVariables.get('authToken');",
+                  "    pm.sendRequest({",
+                  "        url: baseUrl + '/test_suites',",
+                  "        method: 'GET',",
+                  "        header: [{ key: 'Authorization', value: 'Bearer ' + token }]",
+                  "    }, function(err, res) {",
+                  "        pm.expect(res.code).to.equal(200);",
+                  "        pm.expect(res.json().test_suites).to.be.an('array').with.length(0);",
+                  "        done();",
+                  "    });",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"force\": true}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/test_suites",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "test_suites"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{authToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:5000/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "authToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "suiteId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "tempSuiteId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "testCaseId",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}
