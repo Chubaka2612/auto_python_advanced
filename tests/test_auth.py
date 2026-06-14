@@ -1,7 +1,6 @@
 # Auth tests
 import pytest
 import requests
-
 from utils.config import get_credentials
 
 

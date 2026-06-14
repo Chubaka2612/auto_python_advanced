@@ -1,5 +1,4 @@
 import requests
-
 from utils.logger import get_logger
 
 
@@ -11,7 +10,7 @@ class Endpoint:
             "Authorization": f"Bearer {bearer_token}",
             "Content-Type": "application/json",
         }
-    
+
         self.log = get_logger(__name__)
 
     def __truediv__(self, path: str) -> "Endpoint":
@@ -50,9 +49,7 @@ class Endpoint:
 
     def delete(self, item_id: str = "", body: dict = None) -> requests.Response:
         url = f"{self.url}/{item_id}" if item_id else self.url
-
         self.log.info(f"DELETE {url}")
-
         response = requests.delete(url, json=body, headers=self.headers)
         self.log.debug(f"Response: {response.status_code}")
         return response

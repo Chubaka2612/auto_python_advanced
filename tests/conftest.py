@@ -1,9 +1,8 @@
 # Fixtures and hooks
 import pytest
 import requests
-
-from utils.config import get_credentials
 from core.endpoint import Endpoint
+from utils.config import get_credentials
 
 
 def pytest_addoption(parser):
@@ -29,7 +28,7 @@ def bearer_token(login_url) -> str:
         json=credentials,
     )
 
-    assert response.status_code == 200, f"Login failed: {response.text}"
+    assert response.status_code == 200, f"Lohin failed: {response.text}"
     json = response.json()
     assert "access_token" in json, f"access_token missing from login response: {json}"
     return json["access_token"]
