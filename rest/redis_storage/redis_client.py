@@ -1,5 +1,6 @@
 """Module with RedisClient class (contains basic Redis commands)."""
 
+import os
 import redis
 
 
@@ -11,12 +12,14 @@ class RedisClient:
     More info about Redis could be found in README.
     """
 
-    def __init__(self, hash_name, host='localhost', port=6379):
+    def __init__(self, hash_name, host=None, port=6379):
         """
         :param hash_name:   hash name of specific object (i.e."test_case_hash")
-        :param host:    database’s hostname or IP address
+        :param host:    database’s hostname or IP address (defaults to REDIS_HOST env var, then 'localhost')
         :param port:    database’s port
         """
+        if host is None:
+            host = os.environ.get('REDIS_HOST', 'localhost')
         self.redis = redis.Redis(host=host, port=port)
         self.name = hash_name
 
