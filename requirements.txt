@@ -3,5 +3,9 @@ Flask>=1.0.2
 Flask-JWT-Extended>=3.18.2
 flask-cors>=5.0.0
 pytest>=4.5.0
+pytest-xdist
+pytest-html
+requests
+pytest-testinfra
 pyyaml>=5.1
 flasgger>=0.9.7.1
